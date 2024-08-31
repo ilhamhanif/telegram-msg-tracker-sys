@@ -1,5 +1,4 @@
-# Create custom SA with purpose:
-# 1. Ability to write row in GCP BigQuery
+# Create custom SA, attached with roles
 resource "google_service_account" "service_account" {
   account_id   = var.service_account_id
   display_name = var.service_account_name

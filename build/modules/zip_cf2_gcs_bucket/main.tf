@@ -7,8 +7,8 @@ data "archive_file" "source" {
 
 # Create a GCS Bucket to Store Cloud Function ZIP file.
 resource "google_storage_bucket" "bucket_cf_zip_source_code" {
-  name     = "${var.gcs_project_id}-gcf-zip-source"
-  location = var.gcs_location
+  name     = "${var.gcs_zip_project_id}-gcf-zip-source"
+  location = var.gcs_zip_bucket_location
 
   lifecycle_rule {
     condition {
@@ -20,7 +20,7 @@ resource "google_storage_bucket" "bucket_cf_zip_source_code" {
   }
 }
 
-resource "google_storage_bucket_object" "upload_to_bucket_cf_zip_source_code" {
+resource "google_storage_bucket_object" "bucket_cf_zip_source_code_upload" {
   depends_on = [
     data.archive_file.source,
     google_storage_bucket.bucket_cf_zip_source_code
