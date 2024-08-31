@@ -1,4 +1,3 @@
-
 # Generates a ZIP compressed file archieve of the source code.
 data "archive_file" "source" {
   type        = "zip"
