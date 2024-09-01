@@ -11,7 +11,7 @@ import (
 	"github.com/go-telegram/bot/models"
 )
 
-type TelegramApiUpdate models.Update
+type TelegramApiModelUpdate models.Update
 
 // https://cloud.google.com/pubsub/docs/push#properties_of_a_push_subscription
 type PubsubMessage struct {
@@ -26,7 +26,7 @@ type PubsubSubscription struct {
 
 const URL = "http://localhost:8080/TelegramMsgUpdateLogger"
 
-var message = TelegramApiUpdate{
+var telegramMsgUpdate = TelegramApiModelUpdate{
 	ID: 2323514213,
 	Message: &models.Message{
 		ID: 23,
@@ -61,7 +61,7 @@ func main() {
 
 	// Setup message in JSON
 	// mimic-ing real GCP Pub/Sub HTTP push message
-	messageJson, err := json.Marshal(message)
+	messageJson, err := json.Marshal(telegramMsgUpdate)
 	if err != nil {
 		fmt.Printf("Error: %s", err)
 	}

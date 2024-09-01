@@ -9,12 +9,12 @@ import (
 	"github.com/go-telegram/bot/models"
 )
 
-type TelegramApiUpdate models.Update
+type TelegramApiModelUpdate models.Update
 
 const PROJECT_ID = "protean-quanta-434205-p5"
 const PUBSUB_TOPIC = "telegram_msg_update_logger"
 
-var message = TelegramApiUpdate{
+var telegramMsgUpdate = TelegramApiModelUpdate{
 	Message: &models.Message{
 		ID: 28,
 		From: &models.User{
@@ -64,15 +64,15 @@ func main() {
 
 	// Send 100 messages through Pub/Sub
 	for i := 0; i <= 100; i++ {
-		message.ID = 123523412 + int64(i)
-		jsonData, err := json.Marshal(message)
+		telegramMsgUpdate.ID = 123523412 + int64(i)
+		jsonData, err := json.Marshal(telegramMsgUpdate)
 		if err != nil {
 			fmt.Printf("Error: %s", err)
 		}
 		if err := publishToPubSub(jsonData); err != nil {
 			fmt.Printf("Error: %s", err)
 		}
-		fmt.Printf("%d %d\n", i, message.ID)
+		fmt.Printf("%d %d\n", i, telegramMsgUpdate.ID)
 	}
 
 }
