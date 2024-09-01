@@ -53,9 +53,8 @@ locals {
 module "zip_cf2_gcs" {
   source = "../../modules/zip_cf2_gcs_bucket"
 
-  cloud_functions2_name   = local.cf_name
-  gcs_zip_project_id      = var.project_id
-  gcs_zip_bucket_location = var.region
+  cloud_functions2_name = local.cf_name
+  gcs_zip_project_id    = var.project_id
 }
 
 # Create Pub/Sub Topic, and its Subscriber
