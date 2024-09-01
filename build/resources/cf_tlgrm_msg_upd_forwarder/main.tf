@@ -5,7 +5,7 @@ locals {
   cf_entrypoint             = "TelegramMsgUpdateForwarder"
   cf_runtime                = "go122"
   cf_service_account_id     = local.cf_name
-  cf_service_account_name   = "Service Account dedicated for Cloud Function: ${local.cf_name}"
+  cf_service_account_name   = "Service Account dedicated for Cloud Function2: ${local.cf_name}"
   cf_service_account_roles = [
     "roles/pubsub.publisher"
   ]
