@@ -39,7 +39,7 @@ var telegramMsgUpdate = TelegramApiModelUpdate{
 func main() {
 
 	// Setup message in JSON
-	// mimic-ing real GCP Pub/Sub HTTP push message
+	// mimic-ing real Telegram Models Update message
 	messageJson, err := json.Marshal(telegramMsgUpdate)
 	if err != nil {
 		fmt.Printf("Error: %s", err)

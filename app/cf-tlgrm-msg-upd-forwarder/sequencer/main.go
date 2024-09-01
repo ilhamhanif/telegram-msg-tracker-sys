@@ -37,9 +37,11 @@ var telegramMsgUpdate = TelegramApiModelUpdate{
 
 func main() {
 
-	for i := 0; i <= 10000; i++ {
+	// Send 100 messages through Pub/Sub
+	for i := 0; i <= 100; i++ {
+
 		// Setup message in JSON
-		// mimic-ing real GCP Pub/Sub HTTP push message
+		// mimic-ing real Telegram Models Update message
 		telegramMsgUpdate.Message.ID = 2131241246 + i
 		messageJson, err := json.Marshal(telegramMsgUpdate)
 		if err != nil {

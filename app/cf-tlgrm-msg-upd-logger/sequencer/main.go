@@ -64,6 +64,7 @@ func main() {
 
 	// Send 100 messages through Pub/Sub
 	for i := 0; i <= 100; i++ {
+
 		telegramMsgUpdate.ID = 123523412 + int64(i)
 		jsonData, err := json.Marshal(telegramMsgUpdate)
 		if err != nil {
@@ -73,6 +74,7 @@ func main() {
 			fmt.Printf("Error: %s", err)
 		}
 		fmt.Printf("%d %d\n", i, telegramMsgUpdate.ID)
+
 	}
 
 }
