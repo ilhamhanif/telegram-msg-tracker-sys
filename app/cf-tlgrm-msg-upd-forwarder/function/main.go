@@ -51,8 +51,6 @@ func TelegramMsgUpdateForwarder(w http.ResponseWriter, r *http.Request) {
 
 	// Receive and parse HTTP push data message
 	// from Telegram Webhook
-	fmt.Println("---")
-	fmt.Println(telegramMsgUpdate)
 	if err := json.NewDecoder(r.Body).Decode(&telegramMsgUpdate); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -62,7 +60,6 @@ func TelegramMsgUpdateForwarder(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	fmt.Println(string(jsonData))
 
 	// Forward the message to ORCHESTRATOR through Pub/Sub
 	if err := publishToPubSub(PUBSUB_TOPIC_ORCHESTRATOR, jsonData); err != nil {
