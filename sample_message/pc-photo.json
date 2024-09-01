@@ -1,0 +1,63 @@
+{
+    "message": {
+        "chat": {
+            "first_name": "Test",
+            "id": 12312412321,
+            "last_name": "Test",
+            "type": "private",
+            "username": "tests"
+        },
+        "date": 1725193673,
+        "from": {
+            "first_name": "Test",
+            "id": 12312412321,
+            "is_bot": false,
+            "language_code": "en",
+            "last_name": "Test",
+            "username": "tests"
+        },
+        "message_id": 8,
+        "photo": [
+            {
+                "file_id": "1289yh12ruhn-ij12ih8h0h12rh8h12r",
+                "file_size": 783,
+                "file_unique_id": "12oohnojansknlnamndsm",
+                "height": 60,
+                "width": 90
+            },
+            {
+                "file_id": "12j3o12h3oih12oi3h-ijiaishjdiohiohiohaosdhn",
+                "file_size": 10496,
+                "file_unique_id": "ohoqhwenjnawjndj",
+                "height": 212,
+                "width": 320
+            },
+            {
+                "file_id": "12jiohoh124ihkhk1l2h4lkh-hiohiohiohkaslkjmndamsn",
+                "file_size": 40608,
+                "file_unique_id": "12ljh12hoihaisdn",
+                "height": 529,
+                "width": 800
+            },
+            {
+                "file_id": "12n3o1nonoun12nn321n-12noin31o2nunonnonasmndmasd",
+                "file_size": 62619,
+                "file_unique_id": "onanwnenansdninoi-",
+                "height": 846,
+                "width": 1280
+            }
+        ],
+        "pinned_message": {
+            "chat": {
+                "id": 0,
+                "type": ""
+            },
+            "date": 0,
+            "message_id": 0
+        },
+        "reply_markup": {
+            "inline_keyboard": null
+        }
+    },
+    "update_id": 358699434
+}

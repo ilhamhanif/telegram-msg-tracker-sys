@@ -1,0 +1,58 @@
+{
+    "channel_post": {
+        "chat": {
+            "id": -1002208940092,
+            "title": "[Test/Channel] Test",
+            "type": "channel"
+        },
+        "date": 1725193675,
+        "message_id": 51,
+        "photo": [
+            {
+                "file_id": "2312rt2adrqfhuw9y723rhfruejhfuryr8e3h",
+                "file_size": 783,
+                "file_unique_id": "123edsfa412ewd",
+                "height": 60,
+                "width": 90
+            },
+            {
+                "file_id": "2312rt2adrqfhuw9y723rhfruejhfuryr8e3h",
+                "file_size": 10496,
+                "file_unique_id": "123qwrfr132eref",
+                "height": 212,
+                "width": 320
+            },
+            {
+                "file_id": "2312rt2adrqfhuw9y723rhfruejhfuryr8e3h",
+                "file_size": 40608,
+                "file_unique_id": "eqw31212eaf",
+                "height": 529,
+                "width": 800
+            },
+            {
+                "file_id": "2312rt2adrqfhuw9y723rhfruejhfuryr8e3h",
+                "file_size": 62619,
+                "file_unique_id": "123124rqwfa-",
+                "height": 846,
+                "width": 1280
+            }
+        ],
+        "pinned_message": {
+            "chat": {
+                "id": 0,
+                "type": ""
+            },
+            "date": 0,
+            "message_id": 0
+        },
+        "reply_markup": {
+            "inline_keyboard": null
+        },
+        "sender_chat": {
+            "id": -1002208940092,
+            "title": "[Test/Channel] Test",
+            "type": "channel"
+        }
+    },
+    "update_id": 358699435
+}

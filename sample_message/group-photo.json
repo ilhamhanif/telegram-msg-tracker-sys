@@ -1,0 +1,61 @@
+{
+    "message": {
+        "chat": {
+            "id": -1002157107054,
+            "title": "[Test/Group] Test",
+            "type": "supergroup"
+        },
+        "date": 1725193679,
+        "from": {
+            "first_name": "Test",
+            "id": 12312412321,
+            "is_bot": false,
+            "language_code": "en",
+            "last_name": "Test",
+            "username": "tests"
+        },
+        "message_id": 5,
+        "photo": [
+            {
+                "file_id": "12ea-d12efeaddwe1221e",
+                "file_size": 783,
+                "file_unique_id": "asdfwqeaddas",
+                "height": 60,
+                "width": 90
+            },
+            {
+                "file_id": "123edsaffr3r41124412r-asfbcxgweqqwdafwqfa",
+                "file_size": 10496,
+                "file_unique_id": "awe1wadsasdsasd",
+                "height": 212,
+                "width": 320
+            },
+            {
+                "file_id": "123dasfafa-12rqsafgaeqwew",
+                "file_size": 40608,
+                "file_unique_id": "asdaweqdsa",
+                "height": 529,
+                "width": 800
+            },
+            {
+                "file_id": "asddarqewqdasda-qweqwdaasd",
+                "file_size": 62619,
+                "file_unique_id": "123dadsf23r13-",
+                "height": 846,
+                "width": 1280
+            }
+        ],
+        "pinned_message": {
+            "chat": {
+                "id": 0,
+                "type": ""
+            },
+            "date": 0,
+            "message_id": 0
+        },
+        "reply_markup": {
+            "inline_keyboard": null
+        }
+    },
+    "update_id": 358699436
+}
