@@ -16,8 +16,6 @@ type TelegramApiModelUpdate models.Update
 const PROJECT_ID = "protean-quanta-434205-p5"
 const PUBSUB_TOPIC_ORCHESTRATOR = "telegram_msg_orchestrator"
 
-var telegramMsgUpdate TelegramApiModelUpdate
-
 func init() {
 	functions.HTTP("TelegramMsgUpdateForwarder", TelegramMsgUpdateForwarder)
 }
@@ -48,6 +46,8 @@ func publishToPubSub(pubsub_topic string, message []byte) error {
 }
 
 func TelegramMsgUpdateForwarder(w http.ResponseWriter, r *http.Request) {
+
+	var telegramMsgUpdate TelegramApiModelUpdate
 
 	// Receive and parse HTTP push data message
 	// from Telegram Webhook

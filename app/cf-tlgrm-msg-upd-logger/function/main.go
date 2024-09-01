@@ -39,9 +39,6 @@ const PROJECT_ID = "protean-quanta-434205-p5"
 const BQ_DATASET_NAME = "ops"
 const BQ_TABLE_NAME = "telegram_msg_log_update"
 
-var pubsubMessage PubsubSubscription
-var telegramMsgUpdate TelegramApiModelUpdate
-
 func init() {
 	functions.HTTP("TelegramMsgUpdateLogger", TelegramMsgUpdateLogger)
 }
@@ -92,6 +89,9 @@ func insertBqRows(rows []*BqRow) error {
 }
 
 func TelegramMsgUpdateLogger(w http.ResponseWriter, r *http.Request) {
+
+	var pubsubMessage PubsubSubscription
+	var telegramMsgUpdate TelegramApiModelUpdate
 
 	// Receive and parse GCP Pub/Sub HTTP push data message
 	// and Decode the data

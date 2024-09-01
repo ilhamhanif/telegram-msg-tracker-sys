@@ -33,9 +33,6 @@ type TelegramApiModelUpdate models.Update
 const PROJECT_ID = "protean-quanta-434205-p5"
 const PUBSUB_TOPIC_LOGGER = "telegram_msg_update_logger"
 
-var pubsubMessage PubsubSubscription
-var telegramMsgUpdate TelegramApiModelUpdate
-
 func init() {
 	functions.HTTP("TelegramMsgOrchestrator", TelegramMsgOrchestrator)
 }
@@ -66,6 +63,9 @@ func publishToPubSub(pubsub_topic string, message []byte) error {
 }
 
 func TelegramMsgOrchestrator(w http.ResponseWriter, r *http.Request) {
+
+	var pubsubMessage PubsubSubscription
+	var telegramMsgUpdate TelegramApiModelUpdate
 
 	// Receive and parse GCP Pub/Sub HTTP push data message
 	// and Decode the data
