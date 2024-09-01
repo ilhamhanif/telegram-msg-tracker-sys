@@ -1,4 +1,4 @@
-module github.com/ilhamhanif/telegram-msg-tracker-sys/app/cf-telegram-msg-update-logger/sequencer
+module github.com/ilhamhanif/telegram-msg-tracker-sys/app/cf-tlgrm-msg-upd-logger/sequencer
 
 go 1.22.5
 

@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/GoogleCloudPlatform/functions-framework-go/funcframework"
-	_ "github.com/ilhamhanif/telegram-msg-tracker-sys/app/cf-telegram-msg-update-logger/function"
+	_ "github.com/ilhamhanif/telegram-msg-tracker-sys/app/cf-tlgrm-msg-upd-logger/function"
 )
 
 const PORT = "8080"

@@ -116,7 +116,7 @@ func TelegramMsgUpdateLogger(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Always return success
+	// Return `ok`
 	fmt.Fprint(w, "ok")
 
 }
