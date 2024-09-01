@@ -2,7 +2,6 @@ package main
 
 import (
 	"bytes"
-	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -13,18 +12,7 @@ import (
 
 type TelegramApiModelUpdate models.Update
 
-// https://cloud.google.com/pubsub/docs/push#properties_of_a_push_subscription
-type PubsubMessage struct {
-	Data        string `json:"data"`
-	MessageId   string `json:"message_id"`
-	PublishTime string `json:"publish_time"`
-}
-
-type PubsubSubscription struct {
-	Message *PubsubMessage `json:"message"`
-}
-
-const URL = "http://localhost:8080/TelegramMsgUpdateLogger"
+const URL = "http://localhost:8080/TelegramMsgUpdateForwarder"
 
 var telegramMsgUpdate = TelegramApiModelUpdate{
 	ID: 2323514213,
@@ -48,15 +36,6 @@ var telegramMsgUpdate = TelegramApiModelUpdate{
 	},
 }
 
-var pubsubMessage = PubsubMessage{
-	MessageId:   "12453421242435123",
-	PublishTime: "2022-08-12T23:22:36.971Z",
-}
-
-var pubsubSubscription = PubsubSubscription{
-	Message: &pubsubMessage,
-}
-
 func main() {
 
 	// Setup message in JSON
@@ -65,15 +44,10 @@ func main() {
 	if err != nil {
 		fmt.Printf("Error: %s", err)
 	}
-	pubsubSubscription.Message.Data = base64.StdEncoding.EncodeToString(messageJson)
-	payloadJson, err := json.Marshal(pubsubSubscription)
-	if err != nil {
-		fmt.Printf("Error: %s", err)
-	}
 
 	// Sent the data to local endpoint
 	// using HTTP POST
-	req, err := http.NewRequest("POST", URL, bytes.NewBuffer(payloadJson))
+	req, err := http.NewRequest("POST", URL, bytes.NewBuffer(messageJson))
 	if err != nil {
 		fmt.Printf("Error: %s", err)
 	}
