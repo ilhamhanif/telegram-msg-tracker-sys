@@ -14,8 +14,7 @@ import (
 type TelegramApiModelUpdate models.Update
 
 const PROJECT_ID = "protean-quanta-434205-p5"
-const PUBSUB_TOPIC_REGULATOR = "telegram_msg_regulator"
-const PUBSUB_TOPIC_LOGGER = "telegram_msg_update_logger"
+const PUBSUB_TOPIC_ORCHESTRATOR = "telegram_msg_orchestrator"
 
 var telegramMsgUpdate TelegramApiModelUpdate
 
@@ -52,6 +51,8 @@ func TelegramMsgUpdateForwarder(w http.ResponseWriter, r *http.Request) {
 
 	// Receive and parse HTTP push data message
 	// from Telegram Webhook
+	fmt.Println("---")
+	fmt.Println(telegramMsgUpdate)
 	if err := json.NewDecoder(r.Body).Decode(&telegramMsgUpdate); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -61,15 +62,10 @@ func TelegramMsgUpdateForwarder(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	fmt.Println(string(jsonData))
 
-	// // Forward the message to REGULATOR through Pub/Sub
-	// if err := publishToPubSub(PUBSUB_TOPIC_REGULATOR, jsonData); err != nil {
-	// 	http.Error(w, err.Error(), http.StatusInternalServerError)
-	// 	return
-	// }
-
-	// Forward the message to LOGGER through Pub/Sub
-	if err := publishToPubSub(PUBSUB_TOPIC_LOGGER, jsonData); err != nil {
+	// Forward the message to ORCHESTRATOR through Pub/Sub
+	if err := publishToPubSub(PUBSUB_TOPIC_ORCHESTRATOR, jsonData); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

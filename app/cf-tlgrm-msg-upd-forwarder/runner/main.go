@@ -62,7 +62,6 @@ func main() {
 
 	// Print response and status code
 	// given from the API
-	fmt.Println(resp.StatusCode)
 	body, _ := io.ReadAll(resp.Body)
 	fmt.Println(resp.StatusCode, string(body))
 
