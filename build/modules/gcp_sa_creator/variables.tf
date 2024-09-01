@@ -16,4 +16,5 @@ variable "service_account_name" {
 variable "service_account_roles" {
   description = "Service Account Roles"
   type        = list(string)
+  default     = []
 }
