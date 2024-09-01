@@ -3,11 +3,6 @@ variable "gcs_zip_project_id" {
   type        = string
 }
 
-variable "gcs_zip_bucket_location" {
-  description = "GCP GCS ZIP Bucket Location"
-  type        = string
-}
-
 variable "cloud_functions2_name" {
   description = "Cloud Function2 Name"
   type        = string
