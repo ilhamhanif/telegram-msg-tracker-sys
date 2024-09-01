@@ -1,0 +1,29 @@
+{
+    "channel_post": {
+        "chat": {
+            "id": -12312312423412,
+            "title": "[Test/Channel] Test",
+            "type": "channel"
+        },
+        "date": 1725187789,
+        "message_id": 50,
+        "pinned_message": {
+            "chat": {
+                "id": 0,
+                "type": ""
+            },
+            "date": 0,
+            "message_id": 0
+        },
+        "reply_markup": {
+            "inline_keyboard": null
+        },
+        "sender_chat": {
+            "id": -12312312423412,
+            "title": "[Test/Channel] Test",
+            "type": "channel"
+        },
+        "text": "test"
+    },
+    "update_id": 358699432
+}

@@ -1,0 +1,34 @@
+{
+    "message": {
+        "chat": {
+            "first_name": "Test",
+            "id": 1231231241,
+            "last_name": "Test",
+            "type": "private",
+            "username": "test"
+        },
+        "date": 1725187791,
+        "from": {
+            "first_name": "Test",
+            "id": 1231231241,
+            "is_bot": false,
+            "language_code": "en",
+            "last_name": "Test",
+            "username": "test"
+        },
+        "message_id": 7,
+        "pinned_message": {
+            "chat": {
+                "id": 0,
+                "type": ""
+            },
+            "date": 0,
+            "message_id": 0
+        },
+        "reply_markup": {
+            "inline_keyboard": null
+        },
+        "text": "test"
+    },
+    "update_id": 358699433
+}
