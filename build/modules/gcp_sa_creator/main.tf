@@ -4,12 +4,9 @@ resource "google_service_account" "service_account" {
   display_name = var.service_account_name
 }
 
-resource "google_project_iam_binding" "service_account_role_binding" {
+resource "google_project_iam_member" "service_account_role_binding" {
   count   = length(var.service_account_roles)
   project = var.project_id
   role    = var.service_account_roles[count.index]
-
-  members = [
-    "serviceAccount:${google_service_account.service_account.email}"
-  ]
+  member  = "serviceAccount:${google_service_account.service_account.email}"
 }
