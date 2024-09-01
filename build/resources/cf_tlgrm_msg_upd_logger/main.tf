@@ -1,11 +1,11 @@
 # Setup local variables
 locals {
-  sa_default_compute_engine           = "${data.google_project.gcp_project_var.number}-compute@developer.gserviceaccount.com"
+  sa_default_compute_engine           = "${var.project_number}-compute@developer.gserviceaccount.com"
   pubsub_topic_name                   = "telegram_msg_update_logger"
   pubsub_subscriber_name              = local.pubsub_topic_name
   pubsub_subscriber_ack_deadline      = 60
   pubsub_subscriber_expiration_policy = ""
-  cf_name                             = "cf-telegram-msg-update-logger"
+  cf_name                             = "cf-tlgrm-msg-upd-logger"
   cf_entrypoint                       = "TelegramMsgUpdateLogger"
   cf_runtime                          = "go122"
   cf_service_account_id               = local.cf_name
@@ -51,7 +51,7 @@ locals {
 
 # Generates a ZIP compressed file archieve of the source code.
 module "zip_cf2_gcs" {
-  source = "./modules/zip_cf2_gcs_bucket"
+  source = "../../modules/zip_cf2_gcs_bucket"
 
   cloud_functions2_name   = local.cf_name
   gcs_zip_project_id      = var.project_id
@@ -80,7 +80,7 @@ module "pubsub" {
 # Create Cloud Function Gen2
 # with custom Service account
 module "cloud_functions2_service_account" {
-  source = "./modules/gcp_sa_creator"
+  source = "../../modules/gcp_sa_creator"
 
   project_id            = var.project_id
   service_account_id    = local.cf_service_account_id
@@ -89,8 +89,6 @@ module "cloud_functions2_service_account" {
 }
 
 module "cloud_functions2" {
-  depends_on = [null_resource.resource_api_activation_complete]
-
   source  = "GoogleCloudPlatform/cloud-functions/google"
   version = "~> 0.6"
 
