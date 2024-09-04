@@ -24,7 +24,7 @@ type PubsubSubscription struct {
 	Message *PubsubMessage `json:"message"`
 }
 
-const URL = "http://localhost:8080/TelegramMsgOrchestrator"
+const URL = "http://localhost:8080/TelegramMsgIdentificator"
 
 var telegramMsgUpdate = TelegramApiModelUpdate{
 	ID: 2323514213,
@@ -44,7 +44,23 @@ var telegramMsgUpdate = TelegramApiModelUpdate{
 			Type:  "group",
 		},
 		Date: 1231352213,
-		Text: "Test",
+		// Text: "Test",
+		Photo: []models.PhotoSize{
+			{
+				FileID:       "12ea-d12efeaddwe1221e",
+				FileUniqueID: "asdfwqeaddas",
+				FileSize:     783,
+				Height:       60,
+				Width:        90,
+			},
+			{
+				FileID:       "12ea-d12efeaddwe1221e",
+				FileUniqueID: "asdfwqeaddas",
+				FileSize:     783,
+				Height:       60,
+				Width:        90,
+			},
+		},
 	},
 }
 

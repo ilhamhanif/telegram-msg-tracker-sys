@@ -1,12 +1,12 @@
 # Setup local variables
 locals {
   sa_default_compute_engine           = "${var.project_number}-compute@developer.gserviceaccount.com"
-  pubsub_topic_name                   = "telegram_msg_orchestrator"
+  pubsub_topic_name                   = "telegram_msg_identificator"
   pubsub_subscriber_name              = local.pubsub_topic_name
   pubsub_subscriber_ack_deadline      = 60
   pubsub_subscriber_expiration_policy = ""
-  cf_name                             = "cf-tlgrm-msg-orchestrator"
-  cf_entrypoint                       = "TelegramMsgOrchestrator"
+  cf_name                             = "cf-tlgrm-msg-identificator"
+  cf_entrypoint                       = "TelegramMsgIdentificator"
   cf_runtime                          = "go122"
   cf_service_account_id               = local.cf_name
   cf_service_account_name             = "Service Account dedicated for Cloud Function2: ${local.cf_name}"

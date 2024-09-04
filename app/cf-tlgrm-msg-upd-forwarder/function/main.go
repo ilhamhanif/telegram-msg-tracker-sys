@@ -14,7 +14,7 @@ import (
 type TelegramApiModelUpdate models.Update
 
 const PROJECT_ID = "protean-quanta-434205-p5"
-const PUBSUB_TOPIC_ORCHESTRATOR = "telegram_msg_orchestrator"
+const PUBSUB_TOPIC_IDENTIFICATOR = "telegram_msg_identificator"
 
 func init() {
 	functions.HTTP("TelegramMsgUpdateForwarder", TelegramMsgUpdateForwarder)
@@ -61,8 +61,8 @@ func TelegramMsgUpdateForwarder(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Forward the message to ORCHESTRATOR through Pub/Sub
-	if err := publishToPubSub(PUBSUB_TOPIC_ORCHESTRATOR, jsonData); err != nil {
+	// Forward the message to IDENTIFICATOR through Pub/Sub
+	if err := publishToPubSub(PUBSUB_TOPIC_IDENTIFICATOR, jsonData); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
