@@ -1,0 +1,40 @@
+{
+    "message": {
+        "chat": {
+            "id": -1231231242342,
+            "title": "Test",
+            "type": "supergroup"
+        },
+        "date": 1725285095,
+        "entities": [
+            {
+                "custom_emoji_id": "",
+                "length": 25,
+                "offset": 0,
+                "type": "bot_command"
+            }
+        ],
+        "from": {
+            "first_name": "Test",
+            "id": 1231352342,
+            "is_bot": false,
+            "language_code": "en",
+            "last_name": "Test",
+            "username": "testTest"
+        },
+        "message_id": 6,
+        "pinned_message": {
+            "chat": {
+                "id": 0,
+                "type": ""
+            },
+            "date": 0,
+            "message_id": 0
+        },
+        "reply_markup": {
+            "inline_keyboard": null
+        },
+        "text": "/start@Test23856739464Bot"
+    },
+    "update_id": 358699437
+}
