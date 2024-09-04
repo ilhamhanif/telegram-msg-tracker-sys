@@ -51,7 +51,7 @@ locals {
 
 # Generates a ZIP compressed file archieve of the source code.
 module "zip_cf2_gcs" {
-  source = "../../modules/zip_cf2_gcs_bucket"
+  source = "../../modules/gcp_cf2_zip_to_gcs"
 
   cloud_functions2_name = local.cf_name
   gcs_zip_project_id    = var.project_id
