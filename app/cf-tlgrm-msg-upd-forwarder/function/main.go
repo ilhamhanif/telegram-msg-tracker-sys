@@ -13,34 +13,36 @@ import (
 
 type TelegramApiModelUpdate models.Update
 
-const PROJECT_ID = "protean-quanta-434205-p5"
-const PUBSUB_TOPIC_IDENTIFICATOR = "telegram_msg_identificator"
-
 func init() {
 	functions.HTTP("TelegramMsgUpdateForwarder", TelegramMsgUpdateForwarder)
 }
 
-func publishToPubSub(pubsub_topic string, message []byte) error {
+func (u *TelegramApiModelUpdate) publishToPubSub() error {
 
 	// Setup PubSub client
 	ctx := context.Background()
 	client, err := pubsub.NewClient(ctx, PROJECT_ID)
 	if err != nil {
-		return fmt.Errorf("pubsub: NewClient: %w", err)
+		return fmt.Errorf("publishToPubSub: NewClient: %w", err)
 	}
 	defer client.Close()
 
 	// Publish message to PubSub
-	t := client.Topic(pubsub_topic)
+	t := client.Topic(PUBSUB_TOPIC_IDENTIFICATOR)
+	jsonData, err := json.Marshal(u)
+	if err != nil {
+		return fmt.Errorf("publishToPubSub: Error marshalling struct: %w", err)
+	}
 	result := t.Publish(ctx, &pubsub.Message{
-		Data: message,
+		Data: jsonData,
 	})
 
 	// Block until the result is returned
 	// and a server-generated ID is returned for the published message.
 	if _, err := result.Get(ctx); err != nil {
-		return fmt.Errorf("pubsub: result.Get: %w", err)
+		return fmt.Errorf("publishToPubSub: result.Get: %w", err)
 	}
+
 	return nil
 
 }
@@ -55,14 +57,9 @@ func TelegramMsgUpdateForwarder(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	jsonData, err := json.Marshal(telegramMsgUpdate)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
 
 	// Forward the message to IDENTIFICATOR through Pub/Sub
-	if err := publishToPubSub(PUBSUB_TOPIC_IDENTIFICATOR, jsonData); err != nil {
+	if err := telegramMsgUpdate.publishToPubSub(); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
