@@ -31,7 +31,7 @@ func (pm *PubsubSubscription) decodePubSubData(v *TelegramApiModelUpdate) error 
 	// Convert (decode) string JSON
 	pubsubMessageDataDecoded, _ := base64.StdEncoding.DecodeString(pm.Message.Data)
 	if err := json.Unmarshal(pubsubMessageDataDecoded, &v); err != nil {
-		return fmt.Errorf("decodePubSubData: Error decoding PubSub data: %w", err)
+		return fmt.Errorf("decodePubSubData: Error decoding PubSub Message: %w", err)
 	}
 
 	return nil

@@ -12,18 +12,6 @@ import (
 
 type TelegramApiModelUpdate models.Update
 
-type IdentificationResult struct {
-	UpdateId       int
-	UpdateEpoch    int
-	UpdateDate     string
-	UpdateDatetime string
-	Result         struct {
-		Type  string
-		Text  string
-		Photo []models.PhotoSize
-	}
-}
-
 func (u *TelegramApiModelUpdate) publishRawDataToPubSub() error {
 
 	/*
@@ -123,6 +111,7 @@ func (u *TelegramApiModelUpdate) getUpdateType(o *IdentificationResult) error {
 		} else {
 			return errReturn
 		}
+		o.Result.ChatId = u.ChannelPost.Chat.ID
 
 	} else if u.ChannelPost == nil {
 
@@ -136,6 +125,7 @@ func (u *TelegramApiModelUpdate) getUpdateType(o *IdentificationResult) error {
 		} else {
 			return errReturn
 		}
+		o.Result.ChatId = u.Message.Chat.ID
 
 		// Update the Type if a bot_command is found.
 		for _, v := range u.Message.Entities {
