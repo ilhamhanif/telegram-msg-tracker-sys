@@ -12,8 +12,6 @@ import (
 
 type TelegramApiModelUpdate models.Update
 
-const URL = "https://cf-tlgrm-msg-upd-forwarder-j4tflaldfq-et.a.run.app"
-
 var telegramMsgUpdate = TelegramApiModelUpdate{
 	Message: &models.Message{
 		ID: 23,
