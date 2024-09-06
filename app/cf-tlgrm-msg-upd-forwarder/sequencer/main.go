@@ -35,11 +35,11 @@ var telegramMsgUpdate = TelegramApiModelUpdate{
 
 func main() {
 
-	// Send 100 messages through Pub/Sub
+	// Send 100 messages through Pub/Sub.
 	for i := 0; i <= 100; i++ {
 
 		// Setup message in JSON
-		// mimic-ing real Telegram Models Update message
+		// mimic-ing real Telegram Models Update message.
 		telegramMsgUpdate.Message.ID = 2131241246 + i
 		messageJson, err := json.Marshal(telegramMsgUpdate)
 		if err != nil {
@@ -47,7 +47,7 @@ func main() {
 		}
 
 		// Sent the data to local endpoint
-		// using HTTP POST
+		// using HTTP POST.
 		req, err := http.NewRequest("POST", URL, bytes.NewBuffer(messageJson))
 		if err != nil {
 			fmt.Printf("Error: %s", err)
@@ -62,7 +62,7 @@ func main() {
 		defer resp.Body.Close()
 
 		// Print response and status code
-		// given from the API
+		// given from the API.
 		body, _ := io.ReadAll(resp.Body)
 		fmt.Println(resp.StatusCode, string(body))
 	}

@@ -3,19 +3,16 @@ package function
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"time"
 
 	"cloud.google.com/go/bigquery"
 )
 
-type BqRow struct {
-	UpdateMessage TelegramApiModelUpdate
-}
-
 func (r *BqRow) Save() (map[string]bigquery.Value, string, error) {
 
 	/*
-		A method to format BigQuery row record
+		A method to format BigQuery row record.
 	*/
 
 	tz, _ := time.LoadLocation("Asia/Jakarta")
@@ -37,22 +34,22 @@ func (r *BqRow) Save() (map[string]bigquery.Value, string, error) {
 
 }
 
-func insertBqRows(rows []*BqRow) error {
+func (r *BqRow) insertBqRows() error {
 
 	/*
-		A function to insert row records to GCP BigQuery
+		A method to insert row records to GCP BigQuery.
 	*/
 
 	ctx := context.Background()
 	client, err := bigquery.NewClient(ctx, PROJECT_ID)
 	if err != nil {
-		return err
+		return fmt.Errorf("insertBqRows: Error initiating BigQuery client: %w", err)
 	}
 	defer client.Close()
 
 	inserter := client.Dataset(BQ_DATASET_NAME).Table(BQ_TABLE_NAME).Inserter()
-	if err := inserter.Put(ctx, rows); err != nil {
-		return err
+	if err := inserter.Put(ctx, []*BqRow{r}); err != nil {
+		return fmt.Errorf("insertBqRows: Error inserting rows to BigQuery: %w", err)
 	}
 
 	return nil

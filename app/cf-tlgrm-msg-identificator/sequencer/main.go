@@ -32,26 +32,30 @@ var telegramMsgUpdate = TelegramApiModelUpdate{
 	},
 }
 
-func publishToPubSub(message []byte) error {
+func (u *TelegramApiModelUpdate) publishToPubSub() error {
 
-	// Setup PubSub client
+	// Setup PubSub client.
 	ctx := context.Background()
 	client, err := pubsub.NewClient(ctx, PROJECT_ID)
 	if err != nil {
-		return fmt.Errorf("pubsub: NewClient: %w", err)
+		return fmt.Errorf("publishToPubSub: Error creating NewClient: %w", err)
 	}
 	defer client.Close()
 
 	// Publish message to PubSub
 	t := client.Topic(PUBSUB_TOPIC)
+	jsonData, err := json.Marshal(u)
+	if err != nil {
+		return fmt.Errorf("publishToPubSub: Error encoding JSON: %w", err)
+	}
 	result := t.Publish(ctx, &pubsub.Message{
-		Data: message,
+		Data: jsonData,
 	})
 
 	// Block until the result is returned
 	// and a server-generated ID is returned for the published message.
 	if _, err := result.Get(ctx); err != nil {
-		return fmt.Errorf("pubsub: result.Get: %w", err)
+		return fmt.Errorf("publishToPubSub: Error publishing to PubSub: %w", err)
 	}
 	return nil
 
@@ -59,15 +63,11 @@ func publishToPubSub(message []byte) error {
 
 func main() {
 
-	// Send 100 messages through Pub/Sub
+	// Send 100 messages through Pub/Sub.
 	for i := 0; i <= 100; i++ {
 
 		telegramMsgUpdate.ID = 123523412 + int64(i)
-		jsonData, err := json.Marshal(telegramMsgUpdate)
-		if err != nil {
-			fmt.Printf("Error: %s", err)
-		}
-		if err := publishToPubSub(jsonData); err != nil {
+		if err := telegramMsgUpdate.publishToPubSub(); err != nil {
 			fmt.Printf("Error: %s", err)
 		}
 		fmt.Printf("%d %d\n", i, telegramMsgUpdate.ID)

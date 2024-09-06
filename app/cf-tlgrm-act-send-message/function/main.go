@@ -2,24 +2,25 @@ package function
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	"github.com/GoogleCloudPlatform/functions-framework-go/functions"
+	"github.com/go-telegram/bot"
 	"github.com/go-telegram/bot/models"
 )
 
-type PubsubData models.Update
-
-type BqRow struct {
-	UpdateMessage PubsubData
-}
-
 func init() {
-	functions.HTTP("TelegramMsgUpdateLogger", TelegramMsgUpdateLogger)
+	functions.HTTP("TelegramSendMessage", TelegramSendMessage)
 }
 
-func TelegramMsgUpdateLogger(w http.ResponseWriter, r *http.Request) {
+type PubsubData bot.SendMessageParams
+
+type ApiResult struct {
+	StatusCode int            `json:"status_code"`
+	Message    models.Message `json:"message"`
+}
+
+func TelegramSendMessage(w http.ResponseWriter, r *http.Request) {
 
 	/*
 		Main Function.
@@ -27,6 +28,7 @@ func TelegramMsgUpdateLogger(w http.ResponseWriter, r *http.Request) {
 
 	var pubsubMessage PubsubSubscription
 	var pubsubData PubsubData
+	var apiResult ApiResult
 
 	// Receive and parse GCP Pub/Sub HTTP push data message.
 	if err := json.NewDecoder(r.Body).Decode(&pubsubMessage); err != nil {
@@ -34,22 +36,15 @@ func TelegramMsgUpdateLogger(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Decode PubSub Message.
+	// Decode PubSub data to get the `raw` data.
 	if err := pubsubMessage.decodePubSubData(&pubsubData); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	// Insert data to Google BigQuery.
-	var bqRows = BqRow{
-		UpdateMessage: pubsubData,
-	}
-	if err := bqRows.insertBqRows(); err != nil {
+	// Send Message to Telegram.
+	if err := pubsubData.sendMessage(&apiResult); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
 	}
-
-	// Return `ok`.
-	fmt.Fprint(w, "ok")
 
 }

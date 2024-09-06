@@ -7,33 +7,30 @@ import (
 	"time"
 
 	"cloud.google.com/go/pubsub"
-	"github.com/go-telegram/bot/models"
 )
 
-type TelegramApiModelUpdate models.Update
-
-func (u *TelegramApiModelUpdate) publishRawDataToPubSub() error {
+func (u *PubsubData) publishToPubSub() error {
 
 	/*
 		A method to publish the `raw` telegram update message
 		Into BigQuery as logging.
 	*/
 
-	// Setup PubSub client
+	// Setup PubSub client.
 	ctx := context.Background()
 	client, err := pubsub.NewClient(ctx, PROJECT_ID)
 	if err != nil {
-		return fmt.Errorf("publishRawDataToPubSub: Error creating NewClient: %w", err)
+		return fmt.Errorf("publishToPubSub: Error creating NewClient: %w", err)
 	}
 	defer client.Close()
 
-	// Setup the PubSub Message
+	// Setup the PubSub Message.
 	jsonData, err := json.Marshal(u)
 	if err != nil {
-		return fmt.Errorf("publishRawDataToPubSub: Error marshalling struct: %w", err)
+		return fmt.Errorf("publishToPubSub: Error marshalling struct: %w", err)
 	}
 
-	// Publish message to PubSub
+	// Publish message to PubSub.
 	t := client.Topic(PUBSUB_TOPIC_LOGGER)
 	result := t.Publish(ctx, &pubsub.Message{
 		Data: jsonData,
@@ -42,14 +39,14 @@ func (u *TelegramApiModelUpdate) publishRawDataToPubSub() error {
 	// Block until the result is returned
 	// and a server-generated ID is returned for the published message.
 	if _, err := result.Get(ctx); err != nil {
-		return fmt.Errorf("publishRawDataToPubSub: Error result.Get: %w", err)
+		return fmt.Errorf("publishToPubSub: Error publishing to PubSub: %w", err)
 	}
 
 	return nil
 
 }
 
-func (u *TelegramApiModelUpdate) getUpdateMessageID(o *IdentificationResult) error {
+func (u *PubsubData) getUpdateMessageID(o *IdentificationResult) error {
 
 	/*
 		A method to append Update ID.
@@ -61,7 +58,7 @@ func (u *TelegramApiModelUpdate) getUpdateMessageID(o *IdentificationResult) err
 
 }
 
-func (u *TelegramApiModelUpdate) getUpdateTime(o *IdentificationResult) error {
+func (u *PubsubData) getUpdateTime(o *IdentificationResult) error {
 
 	/*
 		A method to convert Update Epoch Time
@@ -88,7 +85,7 @@ func (u *TelegramApiModelUpdate) getUpdateTime(o *IdentificationResult) error {
 
 }
 
-func (u *TelegramApiModelUpdate) getUpdateType(o *IdentificationResult) error {
+func (u *PubsubData) getUpdateType(o *IdentificationResult) error {
 
 	/*
 		A method to determine Update Type.

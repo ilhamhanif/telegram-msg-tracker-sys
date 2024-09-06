@@ -3,6 +3,7 @@ package function
 import (
 	"strings"
 
+	"github.com/go-telegram/bot"
 	"github.com/go-telegram/bot/models"
 )
 
@@ -19,11 +20,7 @@ type IdentificationResult struct {
 	}
 }
 
-type SentMessage struct {
-	UpdateId int    `json:"update_id"`
-	To       int64  `json:"to"`
-	Text     string `json:"text"`
-}
+type MessageSendMessage bot.SendMessageParams
 
 func (r *IdentificationResult) check() error {
 
@@ -32,6 +29,10 @@ func (r *IdentificationResult) check() error {
 	*/
 
 	if err := r.botCommand(); err != nil {
+		return err
+	} else if err := r.text(); err != nil {
+		return err
+	} else if err := r.photo(); err != nil {
 		return err
 	}
 
@@ -43,7 +44,7 @@ func (r *IdentificationResult) botCommand() error {
 
 	/*
 		A method to handle Bot Command
-		If Bot command is not started with /: send Error Message to source
+		If Bot command is not started with /: send Error Message to source.
 	*/
 
 	if r.Result.Type == "BOT COMMAND" {
@@ -60,7 +61,7 @@ func (r *IdentificationResult) botCommand() error {
 func (r *IdentificationResult) text() error {
 
 	/*
-		A method to handle Bot Command
+		A method to handle Bot Command.
 	*/
 
 	return nil
@@ -69,7 +70,7 @@ func (r *IdentificationResult) text() error {
 func (r *IdentificationResult) photo() error {
 
 	/*
-		A method to handle Bot Command
+		A method to handle Bot Command.
 	*/
 
 	return nil
