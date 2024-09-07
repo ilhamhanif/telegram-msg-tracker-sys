@@ -68,8 +68,8 @@ module "cf_tlgrm_msg_upd_forwarder" {
 }
 
 # Cloud Function2 - Telegram Message Identificator
-module "cf_tlgrm_msg_identificatorr" {
-  source     = "./resources/cf_tlgrm_msg_identificator"
+module "cf_tlgrm_msg_upd_identificator" {
+  source     = "./resources/cf_tlgrm_msg_upd_identificator"
   depends_on = [null_resource.resource_api_activation_complete]
 
   project_id     = var.project_id

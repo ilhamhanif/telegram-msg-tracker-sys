@@ -11,7 +11,8 @@ locals {
   cf_service_account_id               = local.cf_name
   cf_service_account_name             = "Service Account dedicated for Cloud Function2: ${local.cf_name}"
   cf_service_account_roles = [
-    "roles/pubsub.publisher"
+    "roles/pubsub.publisher",
+    "roles/bigquery.dataEditor"
   ]
   cf_configuration = {
     min_instance_count    = 0
@@ -21,6 +22,35 @@ locals {
     timeout_seconds       = 60
     service_account_email = module.cloud_functions2_service_account.service_account_email
   }
+  bq_dataset_name = "ops"
+  bq_dataset_id   = local.bq_dataset_name
+  bq_tables = [
+    {
+      table_id = "telegram_msg_log_identification",
+      schema   = <<EOF
+      [
+        { "name": "update_id", "type": "INTEGER", "mode": "NULLABLE" },
+        { "name": "update_epoch", "type": "INTEGER", "mode": "NULLABLE" },
+        { "name": "update_date", "type": "DATE", "mode": "NULLABLE" },
+        { "name": "update_datetime", "type": "DATETIME", "mode": "NULLABLE" },
+        { "name": "result", "type": "JSON", "mode": "NULLABLE" },
+        { "name": "log_date", "type": "DATE", "mode": "NULLABLE" },
+        { "name": "log_datetime", "type": "DATETIME", "mode": "NULLABLE" },
+        { "name": "log_epoch", "type": "INTEGER", "mode": "NULLABLE" }
+      ]
+      EOF
+      time_partitioning = {
+        type                     = "DAY",
+        field                    = "update_date",
+        require_partition_filter = true,
+        expiration_ms            = null,
+      },
+      range_partitioning = null,
+      expiration_time    = null,
+      clustering         = ["update_id", "update_epoch", "log_date", "log_epoch"],
+      labels             = {}
+    }
+  ]
 }
 
 # Generates a ZIP compressed file archieve of the source code.
@@ -76,4 +106,18 @@ module "cloud_functions2" {
     generation = module.zip_cf2_gcs.zip_gcs_object_generation
   }
   service_config = local.cf_configuration
+}
+
+# Create BigQuery dataset and table
+module "bigquery" {
+  source  = "terraform-google-modules/bigquery/google"
+  version = "~> 8.1"
+
+  dataset_id          = local.bq_dataset_id
+  dataset_name        = local.bq_dataset_name
+  project_id          = var.project_id
+  location            = var.region
+  deletion_protection = false
+
+  tables = local.bq_tables
 }
