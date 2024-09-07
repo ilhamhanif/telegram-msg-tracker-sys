@@ -10,8 +10,8 @@ import (
 type PubsubMessage struct {
 	Attributes        map[string]string `json:"attributes"`
 	Data              string            `json:"data"`
-	MessageIdPascal   string            `json:"messageId"`
-	MessageId         string            `json:"message_id"`
+	MessageIDPascal   string            `json:"messageID"`
+	MessageID         string            `json:"message_id"`
 	PublishTimePascal string            `json:"publishTime"`
 	PublishTime       string            `json:"publish_time"`
 }

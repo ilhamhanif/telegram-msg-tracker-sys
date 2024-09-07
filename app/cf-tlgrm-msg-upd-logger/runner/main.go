@@ -16,7 +16,7 @@ type TelegramApiModelUpdate models.Update
 // https://cloud.google.com/pubsub/docs/push#properties_of_a_push_subscription
 type PubsubMessage struct {
 	Data        string `json:"data"`
-	MessageId   string `json:"message_id"`
+	MessageID   string `json:"message_id"`
 	PublishTime string `json:"publish_time"`
 }
 
@@ -49,7 +49,7 @@ var telegramMsgUpdate = TelegramApiModelUpdate{
 }
 
 var pubsubMessage = PubsubMessage{
-	MessageId:   "12453421242435123",
+	MessageID:   "12453421242435123",
 	PublishTime: "2022-08-12T23:22:36.971Z",
 }
 

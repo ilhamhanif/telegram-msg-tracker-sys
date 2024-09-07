@@ -26,19 +26,25 @@ func (r *BqRow) Save() (map[string]bigquery.Value, string, error) {
 	logEpoch := currDatetime.Format("20060102150405")
 	logDate := currDatetime.Format("2006-01-02")
 
-	updateId := r.PubsubData.UpdateID
+	updateID := r.PubsubData.UpdateID
+	updateEpoch := r.PubsubData.UpdateEpoch
+	updateDate := r.PubsubData.UpdateDate
+	updateDatetime := r.PubsubData.UpdateDatetime
 	params, _ := json.Marshal(r.PubsubData.Params)
 	paramsStr := string(params)
 	apiResult, _ := json.Marshal(r.ApiResult)
 	apiResultStr := string(apiResult)
 
 	return map[string]bigquery.Value{
-		"update_id":    updateId,
-		"api_params":   paramsStr,
-		"api_result":   apiResultStr,
-		"log_date":     logDate,
-		"log_datetime": logDatetime,
-		"log_epoch":    logEpoch,
+		"update_id":       updateID,
+		"update_epoch":    updateEpoch,
+		"update_date":     updateDate,
+		"update_datetime": updateDatetime,
+		"api_params":      paramsStr,
+		"api_result":      apiResultStr,
+		"log_date":        logDate,
+		"log_datetime":    logDatetime,
+		"log_epoch":       logEpoch,
 	}, bigquery.NoDedupeID, nil
 
 }

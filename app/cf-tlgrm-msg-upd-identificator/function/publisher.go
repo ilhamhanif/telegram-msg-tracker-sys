@@ -10,8 +10,9 @@ import (
 )
 
 type BotSendMessageParams struct {
-	UpdateID int                   `json:"update_id"`
-	Params   bot.SendMessageParams `json:"params"`
+	UpdateID    int                   `json:"update_id"`
+	UpdateEpoch int                   `json:"update_epoch"`
+	Params      bot.SendMessageParams `json:"params"`
 }
 
 func (sm *BotSendMessageParams) sendMessage() error {

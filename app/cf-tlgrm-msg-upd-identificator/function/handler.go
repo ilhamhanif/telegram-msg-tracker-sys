@@ -8,15 +8,15 @@ import (
 )
 
 type IdentificationResult struct {
-	UpdateId       int
-	UpdateEpoch    int
-	UpdateDate     string
-	UpdateDatetime string
+	UpdateID       int    `json:"update_id"`
+	UpdateEpoch    int    `json:"update_epoch"`
+	UpdateDate     string `json:"update_date"`
+	UpdateDatetime string `json:"update_datetime"`
 	Result         struct {
-		Type   string
-		ChatId int64
-		Text   string
-		Photo  []models.PhotoSize
+		Type   string             `json:"type"`
+		ChatID int64              `json:"chat_id"`
+		Text   string             `json:"text"`
+		Photo  []models.PhotoSize `json:"photos"`
 	}
 }
 
@@ -49,8 +49,9 @@ func (r *IdentificationResult) isBotCommand() error {
 
 	if r.Result.Type == "BOT COMMAND" {
 		if !strings.HasPrefix(r.Result.Text, "/") {
-			botSendMessageParams.UpdateID = r.UpdateId
-			botSendMessageParams.Params.ChatID = r.Result.ChatId
+			botSendMessageParams.UpdateID = r.UpdateID
+			botSendMessageParams.UpdateEpoch = r.UpdateEpoch
+			botSendMessageParams.Params.ChatID = r.Result.ChatID
 			botSendMessageParams.Params.Text = "Bot command have to be started with /."
 		}
 	}

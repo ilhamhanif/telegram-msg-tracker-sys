@@ -16,7 +16,7 @@ const URL = "http://localhost:8080/TelegramSendMessage"
 // https://cloud.google.com/pubsub/docs/push#properties_of_a_push_subscription
 type PubsubMessage struct {
 	Data        string `json:"data"`
-	MessageId   string `json:"message_id"`
+	MessageID   string `json:"message_id"`
 	PublishTime string `json:"publish_time"`
 }
 
@@ -25,20 +25,26 @@ type PubsubSubscription struct {
 }
 
 type BotSendMessageParams struct {
-	UpdateID int                   `json:"update_id"`
-	Params   bot.SendMessageParams `json:"params"`
+	UpdateID       int                   `json:"update_id"`
+	UpdateEpoch    int                   `json:"update_epoch"`
+	UpdateDate     string                `json:"update_date"`
+	UpdateDatetime string                `json:"update_datetime"`
+	Params         bot.SendMessageParams `json:"params"`
 }
 
 var botSendMessageParams = BotSendMessageParams{
-	UpdateID: 53726587267,
+	UpdateID:       53726587267,
+	UpdateEpoch:    1725723760,
+	UpdateDate:     "2024-09-07",
+	UpdateDatetime: "2024-09-07T22:42:40",
 	Params: bot.SendMessageParams{
-		ChatID: 346324432432,
+		ChatID: 1013532553,
 		Text:   "Bot command have to be started with /.",
 	},
 }
 
 var pubsubMessage = PubsubMessage{
-	MessageId:   "12453421242435123",
+	MessageID:   "12453421242435123",
 	PublishTime: "2022-08-12T23:22:36.971Z",
 }
 

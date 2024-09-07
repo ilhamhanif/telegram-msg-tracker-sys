@@ -11,7 +11,7 @@ func (u *PubsubData) getUpdateMessageID(o *IdentificationResult) error {
 		A method to append Update ID.
 	*/
 
-	o.UpdateId = u.Message.ID
+	o.UpdateID = u.Message.ID
 
 	return nil
 
@@ -67,7 +67,7 @@ func (u *PubsubData) getUpdateType(o *IdentificationResult) error {
 		} else {
 			return errReturn
 		}
-		o.Result.ChatId = u.ChannelPost.Chat.ID
+		o.Result.ChatID = u.ChannelPost.Chat.ID
 
 	} else if u.ChannelPost == nil {
 
@@ -81,7 +81,7 @@ func (u *PubsubData) getUpdateType(o *IdentificationResult) error {
 		} else {
 			return errReturn
 		}
-		o.Result.ChatId = u.Message.Chat.ID
+		o.Result.ChatID = u.Message.Chat.ID
 
 		// Update the Type if a bot_command is found.
 		for _, v := range u.Message.Entities {

@@ -10,8 +10,11 @@ import (
 )
 
 type PubsubData struct {
-	UpdateID int                   `json:"update_id"`
-	Params   bot.SendMessageParams `json:"params"`
+	UpdateID       int                   `json:"update_id"`
+	UpdateEpoch    int                   `json:"update_epoch"`
+	UpdateDate     string                `json:"update_date"`
+	UpdateDatetime string                `json:"update_datetime"`
+	Params         bot.SendMessageParams `json:"params"`
 }
 
 type ApiResult struct {

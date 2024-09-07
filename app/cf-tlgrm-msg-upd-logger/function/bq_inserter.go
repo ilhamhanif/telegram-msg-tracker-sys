@@ -21,12 +21,12 @@ func (r *BqRow) Save() (map[string]bigquery.Value, string, error) {
 	logEpoch := currDatetime.Format("20060102150405")
 	logDate := currDatetime.Format("2006-01-02")
 
-	updateId := r.UpdateMessage.ID
+	updateID := r.UpdateMessage.ID
 	update, _ := json.Marshal(r.UpdateMessage)
 	updateStr := string(update)
 
 	return map[string]bigquery.Value{
-		"update_id":    updateId,
+		"update_id":    updateID,
 		"update":       updateStr,
 		"log_date":     logDate,
 		"log_datetime": logDatetime,
