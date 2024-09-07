@@ -33,7 +33,7 @@ resource "google_project_service" "gcp_api_services" {
   disable_on_destroy = false
 }
 
-# Google Cloud Storage - Store All Clouc Function2 ZIP files
+# Google Cloud Storage - Store All Cloud Function2 ZIP files
 resource "google_storage_bucket" "bucket_cf_zip_source_code" {
   name     = "${var.project_id}-gcf-zip-source"
   location = var.region
@@ -55,6 +55,16 @@ resource "null_resource" "resource_api_activation_complete" {
     google_project_service.gcp_api_services,
     google_storage_bucket.bucket_cf_zip_source_code
   ]
+}
+
+# BigQuery - Dataset OPS
+module "bq_dataset_ops" {
+  source     = "./resources/bq_dataset_ops"
+  depends_on = [null_resource.resource_api_activation_complete]
+
+  project_id     = var.project_id
+  project_number = data.google_project.gcp_project_var.number
+  region         = var.region
 }
 
 # Cloud Function2 - Telegram Message Forwarder

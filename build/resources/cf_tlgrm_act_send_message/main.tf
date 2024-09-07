@@ -10,7 +10,9 @@ locals {
   cf_runtime                          = "go122"
   cf_service_account_id               = local.cf_name
   cf_service_account_name             = "Service Account dedicated for Cloud Function2: ${local.cf_name}"
-  cf_service_account_roles            = []
+  cf_service_account_roles = [
+    "roles/bigquery.dataEditor"
+  ]
   cf_configuration = {
     min_instance_count    = 0
     max_instance_count    = 1
