@@ -10,7 +10,8 @@ import (
 )
 
 type BqRow struct {
-	IdentificationResult IdentificationResult
+	PubsubData PubsubData
+	ApiResult  ApiResult
 }
 
 func (r *BqRow) Save() (map[string]bigquery.Value, string, error) {
@@ -25,22 +26,19 @@ func (r *BqRow) Save() (map[string]bigquery.Value, string, error) {
 	logEpoch := currDatetime.Format("20060102150405")
 	logDate := currDatetime.Format("2006-01-02")
 
-	updateId := r.IdentificationResult.UpdateId
-	updateEpoch := r.IdentificationResult.UpdateEpoch
-	updateDate := r.IdentificationResult.UpdateDate
-	updateDatetime := r.IdentificationResult.UpdateDatetime
-	result, _ := json.Marshal(r.IdentificationResult.Result)
-	resultStr := string(result)
+	updateId := r.PubsubData.UpdateID
+	params, _ := json.Marshal(r.PubsubData.Params)
+	paramsStr := string(params)
+	apiResult, _ := json.Marshal(r.ApiResult)
+	apiResultStr := string(apiResult)
 
 	return map[string]bigquery.Value{
-		"update_id":       updateId,
-		"update_epoch":    updateEpoch,
-		"update_date":     updateDate,
-		"update_datetime": updateDatetime,
-		"result":          resultStr,
-		"log_date":        logDate,
-		"log_datetime":    logDatetime,
-		"log_epoch":       logEpoch,
+		"updateId":     updateId,
+		"api_params":   paramsStr,
+		"api_result":   apiResultStr,
+		"log_date":     logDate,
+		"log_datetime": logDatetime,
+		"log_epoch":    logEpoch,
 	}, bigquery.NoDedupeID, nil
 
 }

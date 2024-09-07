@@ -24,9 +24,17 @@ type PubsubSubscription struct {
 	Message *PubsubMessage `json:"message"`
 }
 
-var telegramMsgUpdate = bot.SendMessageParams{
-	ChatID: 53726587267,
-	Text:   "Bot command have to be started with /.",
+type BotSendMessageParams struct {
+	UpdateID int                   `json:"update_id"`
+	Params   bot.SendMessageParams `json:"params"`
+}
+
+var botSendMessageParams = BotSendMessageParams{
+	UpdateID: 53726587267,
+	Params: bot.SendMessageParams{
+		ChatID: 346324432432,
+		Text:   "Bot command have to be started with /.",
+	},
 }
 
 var pubsubMessage = PubsubMessage{
@@ -42,7 +50,7 @@ func main() {
 
 	// Setup message in JSON
 	// mimic-ing real GCP Pub/Sub HTTP push message.
-	messageJson, err := json.Marshal(telegramMsgUpdate)
+	messageJson, err := json.Marshal(botSendMessageParams)
 	if err != nil {
 		fmt.Printf("Error: %s", err)
 	}

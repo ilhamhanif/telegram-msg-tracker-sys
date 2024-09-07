@@ -15,7 +15,7 @@ func (m *PubsubData) sendMessage(v *ApiResult) error {
 	*/
 
 	// Setup message in JSON.
-	messageJson, err := json.Marshal(m)
+	messageJson, err := json.Marshal(m.Params)
 	if err != nil {
 		return fmt.Errorf("sendMessage: Error: %w", err)
 	}

@@ -20,6 +20,7 @@ func (r *BqRow) Save() (map[string]bigquery.Value, string, error) {
 	logDatetime := currDatetime.Format("2006-01-02T15:04:05")
 	logEpoch := currDatetime.Format("20060102150405")
 	logDate := currDatetime.Format("2006-01-02")
+
 	updateId := r.UpdateMessage.ID
 	update, _ := json.Marshal(r.UpdateMessage)
 	updateStr := string(update)

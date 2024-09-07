@@ -9,7 +9,10 @@ import (
 	"github.com/go-telegram/bot/models"
 )
 
-type PubsubData bot.SendMessageParams
+type PubsubData struct {
+	UpdateID int                   `json:"update_id"`
+	Params   bot.SendMessageParams `json:"params"`
+}
 
 type ApiResult struct {
 	StatusCode int            `json:"status_code"`
@@ -51,6 +54,16 @@ func TelegramSendMessage(w http.ResponseWriter, r *http.Request) {
 	// Send Message to Telegram.
 	if err := pubsubData.sendMessage(&apiResult); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+
+	// Store send message log result.
+	var bqRows = BqRow{
+		PubsubData: pubsubData,
+		ApiResult:  apiResult,
+	}
+	if err := bqRows.insertBqRows(); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 
 }
