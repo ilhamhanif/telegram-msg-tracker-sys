@@ -1,7 +1,7 @@
 # Setup local variables
 locals {
   sa_default_compute_engine           = "${var.project_number}-compute@developer.gserviceaccount.com"
-  pubsub_topic_name                   = "telegram_msg_update_logger"
+  pubsub_topic_name                   = "tlgrm_msg_upd_logger"
   pubsub_subscriber_name              = local.pubsub_topic_name
   pubsub_subscriber_ack_deadline      = 60
   pubsub_subscriber_expiration_policy = ""
