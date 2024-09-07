@@ -16,7 +16,7 @@ type ApiResult struct {
 	Message    models.Message `json:"message"`
 }
 
-const BOT_TOKEN = "7395528138:AAHPmcAczdrMYzROqvLjynH0kAZnaPNV2Pg"
+const BOT_TOKEN = "7536185035:AAEGzJBD1iomeooHuRYpZtW81R-OyOECsBg"
 const URL = "https://api.telegram.org/bot" + BOT_TOKEN + "/sendMessage"
 
 func init() {
