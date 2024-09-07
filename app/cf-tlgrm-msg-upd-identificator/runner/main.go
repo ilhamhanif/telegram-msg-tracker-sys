@@ -13,6 +13,8 @@ import (
 
 type TelegramApiModelUpdate models.Update
 
+const URL = "http://localhost:8080/TelegramMsgUpdIdentificator"
+
 // https://cloud.google.com/pubsub/docs/push#properties_of_a_push_subscription
 type PubsubMessage struct {
 	Data        string `json:"data"`

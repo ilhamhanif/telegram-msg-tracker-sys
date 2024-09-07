@@ -86,3 +86,13 @@ module "cf_tlgrm_msg_upd_logger" {
   project_number = data.google_project.gcp_project_var.number
   region         = var.region
 }
+
+# Cloud Function2 - Telegram Action - Send Message
+module "cf_tlgrm_act_send_message" {
+  source     = "./resources/cf_tlgrm_act_send_message"
+  depends_on = [null_resource.resource_api_activation_complete]
+
+  project_id     = var.project_id
+  project_number = data.google_project.gcp_project_var.number
+  region         = var.region
+}

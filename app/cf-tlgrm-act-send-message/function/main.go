@@ -9,15 +9,18 @@ import (
 	"github.com/go-telegram/bot/models"
 )
 
-func init() {
-	functions.HTTP("TelegramSendMessage", TelegramSendMessage)
-}
-
 type PubsubData bot.SendMessageParams
 
 type ApiResult struct {
 	StatusCode int            `json:"status_code"`
 	Message    models.Message `json:"message"`
+}
+
+const BOT_TOKEN = "7395528138:AAHPmcAczdrMYzROqvLjynH0kAZnaPNV2Pg"
+const URL = "https://api.telegram.org/bot" + BOT_TOKEN + "/sendMessage"
+
+func init() {
+	functions.HTTP("TelegramSendMessage", TelegramSendMessage)
 }
 
 func TelegramSendMessage(w http.ResponseWriter, r *http.Request) {

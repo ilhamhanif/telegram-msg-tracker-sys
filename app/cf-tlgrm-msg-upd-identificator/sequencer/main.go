@@ -11,6 +11,9 @@ import (
 
 type TelegramApiModelUpdate models.Update
 
+const PROJECT_ID = "protean-quanta-434205-p5"
+const PUBSUB_TOPIC = "tlgrm_msg_identificator"
+
 var telegramMsgUpdate = TelegramApiModelUpdate{
 	Message: &models.Message{
 		ID: 28,

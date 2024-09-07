@@ -24,6 +24,8 @@ type PubsubSubscription struct {
 	Message *PubsubMessage `json:"message"`
 }
 
+const URL = "http://localhost:8080/TelegramMsgUpdateLogger"
+
 var telegramMsgUpdate = TelegramApiModelUpdate{
 	ID: 2323514213,
 	Message: &models.Message{

@@ -12,6 +12,8 @@ import (
 
 type TelegramApiModelUpdate models.Update
 
+const URL = "http://localhost:8080/TelegramMsgUpdateForwarder"
+
 var telegramMsgUpdate = TelegramApiModelUpdate{
 	ID: 2323514213,
 	Message: &models.Message{
