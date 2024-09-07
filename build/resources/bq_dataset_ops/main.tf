@@ -54,6 +54,9 @@ locals {
       schema   = <<EOF
       [
         { "name": "update_id", "type": "INTEGER", "mode": "NULLABLE" },
+        { "name": "update_epoch", "type": "INTEGER", "mode": "NULLABLE" },
+        { "name": "update_date", "type": "DATE", "mode": "NULLABLE" },
+        { "name": "update_datetime", "type": "DATETIME", "mode": "NULLABLE" },
         { "name": "api_params", "type": "JSON", "mode": "NULLABLE" },
         { "name": "api_result", "type": "JSON", "mode": "NULLABLE" },
         { "name": "log_date", "type": "DATE", "mode": "NULLABLE" },
@@ -63,13 +66,13 @@ locals {
       EOF
       time_partitioning = {
         type                     = "DAY",
-        field                    = "log_date",
+        field                    = "update_date",
         require_partition_filter = true,
         expiration_ms            = null,
       },
       range_partitioning = null,
       expiration_time    = null,
-      clustering         = ["update_id", "log_epoch"],
+      clustering         = ["update_id", "update_epoch", "log_date", "log_epoch"],
       labels             = {}
     }
   ]
