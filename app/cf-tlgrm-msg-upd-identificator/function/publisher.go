@@ -6,27 +6,26 @@ import (
 	"fmt"
 
 	"cloud.google.com/go/pubsub"
+	"github.com/go-telegram/bot"
 )
 
-func (u *TelegramApiModelUpdate) publishToPubSub() error {
+type BotSendMessageParams bot.SendMessageParams
 
-	/*
-		A method to publish the message to PubSub
-	*/
+func (sm *BotSendMessageParams) sendMessage() error {
 
 	// Setup PubSub client
 	ctx := context.Background()
 	client, err := pubsub.NewClient(ctx, PROJECT_ID)
 	if err != nil {
-		return fmt.Errorf("publishToPubSub: Error initiating PubSub client: %w", err)
+		return fmt.Errorf("sendMessage: Error initiating PubSub client: %w", err)
 	}
 	defer client.Close()
 
 	// Publish message to PubSub
-	t := client.Topic(PUBSUB_TOPIC_IDENTIFICATOR)
-	jsonData, err := json.Marshal(u)
+	t := client.Topic(PUBSUB_TOPIC_SEND_MESSAGE)
+	jsonData, err := json.Marshal(sm)
 	if err != nil {
-		return fmt.Errorf("publishToPubSub: Error encoding JSON: %w", err)
+		return fmt.Errorf("sendMessage: Error encoding JSON: %w", err)
 	}
 	result := t.Publish(ctx, &pubsub.Message{
 		Data: jsonData,
@@ -35,9 +34,8 @@ func (u *TelegramApiModelUpdate) publishToPubSub() error {
 	// Block until the result is returned
 	// and a server-generated ID is returned for the published message.
 	if _, err := result.Get(ctx); err != nil {
-		return fmt.Errorf("publishToPubSub: Error publishing to PubSub: %w", err)
+		return fmt.Errorf("sendMessage: Error publishing to PubSub: %w", err)
 	}
 
 	return nil
-
 }

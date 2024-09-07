@@ -12,10 +12,10 @@ import (
 type PubsubData models.Update
 
 func init() {
-	functions.HTTP("TelegramMsgIdentificator", TelegramMsgIdentificator)
+	functions.HTTP("TelegramMsgUpdIdentificator", TelegramMsgUpdIdentificator)
 }
 
-func TelegramMsgIdentificator(w http.ResponseWriter, r *http.Request) {
+func TelegramMsgUpdIdentificator(w http.ResponseWriter, r *http.Request) {
 
 	/*
 		Main Function.
