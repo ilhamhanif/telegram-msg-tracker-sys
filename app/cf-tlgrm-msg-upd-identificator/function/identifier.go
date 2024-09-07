@@ -86,7 +86,7 @@ func (u *PubsubData) getUpdateType(o *IdentificationResult) error {
 		// Update the Type if a bot_command is found.
 		for _, v := range u.Message.Entities {
 			if v.Type == "bot_command" {
-				o.Result.Type = "BOT COMMAND"
+				o.Result.Type = "BOT_COMMAND"
 			}
 		}
 

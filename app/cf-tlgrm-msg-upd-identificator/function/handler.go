@@ -47,10 +47,12 @@ func (r *IdentificationResult) isBotCommand() error {
 
 	var botSendMessageParams BotSendMessageParams
 
-	if r.Result.Type == "BOT COMMAND" {
+	if r.Result.Type == "BOT_COMMAND" {
 		if !strings.HasPrefix(r.Result.Text, "/") {
 			botSendMessageParams.UpdateID = r.UpdateID
 			botSendMessageParams.UpdateEpoch = r.UpdateEpoch
+			botSendMessageParams.UpdateDate = r.UpdateDate
+			botSendMessageParams.UpdateDatetime = r.UpdateDatetime
 			botSendMessageParams.Params.ChatID = r.Result.ChatID
 			botSendMessageParams.Params.Text = "Bot command have to be started with /."
 		}
