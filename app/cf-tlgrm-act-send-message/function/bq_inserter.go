@@ -33,7 +33,7 @@ func (r *BqRow) Save() (map[string]bigquery.Value, string, error) {
 	apiResultStr := string(apiResult)
 
 	return map[string]bigquery.Value{
-		"updateId":     updateId,
+		"update_id":    updateId,
 		"api_params":   paramsStr,
 		"api_result":   apiResultStr,
 		"log_date":     logDate,
