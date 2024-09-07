@@ -18,6 +18,9 @@ type ApiResult struct {
 
 const BOT_TOKEN = "7536185035:AAEGzJBD1iomeooHuRYpZtW81R-OyOECsBg"
 const URL = "https://api.telegram.org/bot" + BOT_TOKEN + "/sendMessage"
+const PROJECT_ID = "protean-quanta-434205-p5"
+const BQ_DATASET_NAME = "ops"
+const BQ_TABLE_NAME = "telegram_act_log_send_message"
 
 func init() {
 	functions.HTTP("TelegramSendMessage", TelegramSendMessage)

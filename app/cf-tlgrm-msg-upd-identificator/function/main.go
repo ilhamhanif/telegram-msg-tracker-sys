@@ -12,8 +12,9 @@ import (
 type PubsubData models.Update
 
 const PROJECT_ID = "protean-quanta-434205-p5"
-const PUBSUB_TOPIC_LOGGER = "tlgrm_msg_upd_logger"
 const PUBSUB_TOPIC_SEND_MESSAGE = "tlgrm_act_send_message"
+const BQ_DATASET_NAME = "ops"
+const BQ_TABLE_NAME = "telegram_msg_log_identification"
 
 func init() {
 	functions.HTTP("TelegramMsgUpdIdentificator", TelegramMsgUpdIdentificator)
@@ -41,12 +42,6 @@ func TelegramMsgUpdIdentificator(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Forward the `raw` message to LOGGER through Pub/Sub.
-	if err := pubsubData.publishToPubSub(); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
 	// Identify the message.
 	if err := pubsubData.getUpdateMessageID(&identificationResult); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -63,6 +58,15 @@ func TelegramMsgUpdIdentificator(w http.ResponseWriter, r *http.Request) {
 
 	// Handle the identification result.
 	if err := identificationResult.check(); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Store identification result.
+	var bqRows = BqRow{
+		IdentificationResult: identificationResult,
+	}
+	if err := bqRows.insertBqRows(); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

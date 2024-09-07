@@ -60,6 +60,7 @@ func (u *TelegramApiModelUpdate) publishToPubSub() error {
 	if _, err := result.Get(ctx); err != nil {
 		return fmt.Errorf("publishToPubSub: Error publishing to PubSub: %w", err)
 	}
+
 	return nil
 
 }
@@ -74,7 +75,6 @@ func main() {
 			fmt.Printf("Error: %s", err)
 		}
 		fmt.Printf("%d %d\n", i, telegramMsgUpdate.ID)
-
 	}
 
 }

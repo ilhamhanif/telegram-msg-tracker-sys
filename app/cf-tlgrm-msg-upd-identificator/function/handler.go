@@ -49,8 +49,9 @@ func (r *IdentificationResult) isBotCommand() error {
 
 	if r.Result.Type == "BOT COMMAND" {
 		if !strings.HasPrefix(r.Result.Text, "/") {
-			botSendMessageParams.ChatID = r.Result.ChatId
-			botSendMessageParams.Text = "Bot command have to be started with /."
+			botSendMessageParams.UpdateID = r.UpdateId
+			botSendMessageParams.Params.ChatID = r.Result.ChatId
+			botSendMessageParams.Params.Text = "Bot command have to be started with /."
 		}
 	}
 	if err := botSendMessageParams.sendMessage(); err != nil {
@@ -58,6 +59,7 @@ func (r *IdentificationResult) isBotCommand() error {
 	}
 
 	return nil
+
 }
 
 func (r *IdentificationResult) isText() error {
@@ -67,6 +69,7 @@ func (r *IdentificationResult) isText() error {
 	*/
 
 	return nil
+
 }
 
 func (r *IdentificationResult) isPhoto() error {
@@ -76,4 +79,5 @@ func (r *IdentificationResult) isPhoto() error {
 	*/
 
 	return nil
+
 }

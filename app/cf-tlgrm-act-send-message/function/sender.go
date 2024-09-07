@@ -46,4 +46,5 @@ func (m *PubsubData) sendMessage(v *ApiResult) error {
 	v.StatusCode = resp.StatusCode
 
 	return nil
+
 }

@@ -8,7 +8,7 @@ import (
 	"cloud.google.com/go/pubsub"
 )
 
-func (u *TelegramApiModelUpdate) publishToPubSub() error {
+func (u *TelegramApiModelUpdate) publishToPubSub(pubsub_topic string) error {
 
 	/*
 		A method to publish the message to PubSub.
@@ -23,7 +23,7 @@ func (u *TelegramApiModelUpdate) publishToPubSub() error {
 	defer client.Close()
 
 	// Publish message to PubSub.
-	t := client.Topic(PUBSUB_TOPIC_IDENTIFICATOR)
+	t := client.Topic(pubsub_topic)
 	jsonData, err := json.Marshal(u)
 	if err != nil {
 		return fmt.Errorf("publishToPubSub: Error encoding JSON: %w", err)

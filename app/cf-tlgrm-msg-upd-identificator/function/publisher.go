@@ -9,7 +9,10 @@ import (
 	"github.com/go-telegram/bot"
 )
 
-type BotSendMessageParams bot.SendMessageParams
+type BotSendMessageParams struct {
+	UpdateID int                   `json:"update_id"`
+	Params   bot.SendMessageParams `json:"params"`
+}
 
 func (sm *BotSendMessageParams) sendMessage() error {
 
@@ -38,4 +41,5 @@ func (sm *BotSendMessageParams) sendMessage() error {
 	}
 
 	return nil
+
 }
