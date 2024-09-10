@@ -6,7 +6,17 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+
+	"github.com/go-telegram/bot"
 )
+
+type PubsubData struct {
+	UpdateID       int                   `json:"update_id"`
+	UpdateEpoch    int                   `json:"update_epoch"`
+	UpdateDate     string                `json:"update_date"`
+	UpdateDatetime string                `json:"update_datetime"`
+	Params         bot.SendMessageParams `json:"params"`
+}
 
 func (m *PubsubData) sendMessage(v *ApiResult) error {
 

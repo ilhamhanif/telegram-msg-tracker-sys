@@ -6,10 +6,7 @@ import (
 	"net/http"
 
 	"github.com/GoogleCloudPlatform/functions-framework-go/functions"
-	"github.com/go-telegram/bot/models"
 )
-
-type TelegramApiModelUpdate models.Update
 
 const PROJECT_ID = "protean-quanta-434205-p5"
 const PUBSUB_TOPIC_IDENTIFICATOR = "tlgrm_msg_identificator"

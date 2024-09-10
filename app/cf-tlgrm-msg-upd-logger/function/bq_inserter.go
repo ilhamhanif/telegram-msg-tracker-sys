@@ -9,6 +9,10 @@ import (
 	"cloud.google.com/go/bigquery"
 )
 
+type BqRow struct {
+	UpdateMessage PubsubData
+}
+
 func (r *BqRow) Save() (map[string]bigquery.Value, string, error) {
 
 	/*

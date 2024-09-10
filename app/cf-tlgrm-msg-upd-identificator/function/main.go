@@ -6,10 +6,7 @@ import (
 	"net/http"
 
 	"github.com/GoogleCloudPlatform/functions-framework-go/functions"
-	"github.com/go-telegram/bot/models"
 )
-
-type PubsubData models.Update
 
 const PROJECT_ID = "protean-quanta-434205-p5"
 const PUBSUB_TOPIC_SEND_MESSAGE = "tlgrm_act_send_message"

@@ -6,7 +6,10 @@ import (
 	"fmt"
 
 	"cloud.google.com/go/pubsub"
+	"github.com/go-telegram/bot/models"
 )
+
+type TelegramApiModelUpdate models.Update
 
 func (u *TelegramApiModelUpdate) publishToPubSub(pubsub_topic string) error {
 

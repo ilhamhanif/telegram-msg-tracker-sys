@@ -3,7 +3,11 @@ package function
 import (
 	"fmt"
 	"time"
+
+	"github.com/go-telegram/bot/models"
 )
+
+type PubsubData models.Update
 
 func (u *PubsubData) getUpdateMessageID(o *IdentificationResult) error {
 

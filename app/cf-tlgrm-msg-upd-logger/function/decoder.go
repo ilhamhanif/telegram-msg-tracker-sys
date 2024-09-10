@@ -22,14 +22,14 @@ type PubsubSubscription struct {
 	DeliveryAttempt int8           `json:"deliveryAttempt"`
 }
 
-func (pm *PubsubSubscription) decodePubSubData(v *PubsubData) error {
+func (ps *PubsubSubscription) decodePubSubData(v *PubsubData) error {
 
 	/*
 		A method to Decode a PubSub data to v.
 	*/
 
 	// Convert (decode) string JSON.
-	pubsubMessageDataDecoded, _ := base64.StdEncoding.DecodeString(pm.Message.Data)
+	pubsubMessageDataDecoded, _ := base64.StdEncoding.DecodeString(ps.Message.Data)
 	if err := json.Unmarshal(pubsubMessageDataDecoded, &v); err != nil {
 		return fmt.Errorf("decodePubSubData: Error decoding PubSub Message: %w", err)
 	}

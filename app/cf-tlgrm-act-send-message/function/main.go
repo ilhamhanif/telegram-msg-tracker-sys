@@ -5,17 +5,8 @@ import (
 	"net/http"
 
 	"github.com/GoogleCloudPlatform/functions-framework-go/functions"
-	"github.com/go-telegram/bot"
 	"github.com/go-telegram/bot/models"
 )
-
-type PubsubData struct {
-	UpdateID       int                   `json:"update_id"`
-	UpdateEpoch    int                   `json:"update_epoch"`
-	UpdateDate     string                `json:"update_date"`
-	UpdateDatetime string                `json:"update_datetime"`
-	Params         bot.SendMessageParams `json:"params"`
-}
 
 type ApiResult struct {
 	StatusCode int            `json:"status_code"`
