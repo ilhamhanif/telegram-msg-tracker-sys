@@ -102,7 +102,7 @@ func (pd *PubsubData) downloadFile() error {
 			return fmt.Errorf("downloadFile: Failed to upload file to GCS: %w", err)
 		}
 
-		// Insert download and upload activitylog
+		// Insert download and upload activity log
 		// to Google BigQuery.
 		var bqRows = BqRow{
 			PubsubData:     *pd,
