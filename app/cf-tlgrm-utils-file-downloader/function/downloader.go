@@ -103,7 +103,6 @@ func (pd *PubsubData) downloadFile() error {
 		// Insert log to Google BigQuery.
 		var bqRows = BqRow{
 			PubsubData:     *pd,
-			ApiResult:      apiResult,
 			DownloadedFile: downloadedFile,
 		}
 		if err := bqRows.insertBqRows(); err != nil {

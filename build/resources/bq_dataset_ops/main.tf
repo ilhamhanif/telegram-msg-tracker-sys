@@ -11,6 +11,9 @@ locals {
         { "name": "update_date", "type": "DATE", "mode": "NULLABLE" },
         { "name": "update_datetime", "type": "DATETIME", "mode": "NULLABLE" },
         { "name": "file", "type": "JSON", "mode": "NULLABLE" },
+        { "name": "file_name", "type": "STRING", "mode": "NULLABLE" },
+        { "name": "file_path", "type": "STRING", "mode": "NULLABLE" },
+        { "name": "file_path_rel", "type": "STRING", "mode": "NULLABLE" },
         { "name": "log_date", "type": "DATE", "mode": "NULLABLE" },
         { "name": "log_datetime", "type": "DATETIME", "mode": "NULLABLE" },
         { "name": "log_epoch", "type": "INTEGER", "mode": "NULLABLE" }
@@ -24,7 +27,7 @@ locals {
       },
       range_partitioning = null,
       expiration_time    = null,
-      clustering         = ["update_id", "file_name", "log_date", "log_epoch"],
+      clustering         = ["update_id", "log_date", "log_epoch", "file_name"],
       labels             = {}
     },
     {

@@ -11,7 +11,6 @@ import (
 
 type BqRow struct {
 	PubsubData     PubsubData
-	ApiResult      ApiResult
 	DownloadedFile DownloadedFile
 }
 
@@ -33,6 +32,9 @@ func (r *BqRow) Save() (map[string]bigquery.Value, string, error) {
 	updateDatetime := r.PubsubData.UpdateDatetime
 	file, _ := json.Marshal(r.DownloadedFile)
 	fileStr := string(file)
+	fileName := r.DownloadedFile.FileName
+	filePath := r.DownloadedFile.FilePath
+	filePathRel := r.DownloadedFile.FilePathRel
 
 	return map[string]bigquery.Value{
 		"update_id":       updateID,
@@ -40,6 +42,9 @@ func (r *BqRow) Save() (map[string]bigquery.Value, string, error) {
 		"update_date":     updateDate,
 		"update_datetime": updateDatetime,
 		"file":            fileStr,
+		"file_name":       fileName,
+		"file_path":       filePath,
+		"file_path_rel":   filePathRel,
 		"log_date":        logDate,
 		"log_datetime":    logDatetime,
 		"log_epoch":       logEpoch,
