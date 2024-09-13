@@ -3,6 +3,31 @@ locals {
   bq_dataset_id   = local.bq_dataset_name
   bq_tables = [
     {
+      table_id = "telegram_utils_log_file_downloader",
+      schema   = <<EOF
+      [
+        { "name": "update_id", "type": "INTEGER", "mode": "NULLABLE" },
+        { "name": "update_epoch", "type": "INTEGER", "mode": "NULLABLE" },
+        { "name": "update_date", "type": "DATE", "mode": "NULLABLE" },
+        { "name": "update_datetime", "type": "DATETIME", "mode": "NULLABLE" },
+        { "name": "file", "type": "JSON", "mode": "NULLABLE" },
+        { "name": "log_date", "type": "DATE", "mode": "NULLABLE" },
+        { "name": "log_datetime", "type": "DATETIME", "mode": "NULLABLE" },
+        { "name": "log_epoch", "type": "INTEGER", "mode": "NULLABLE" }
+      ]
+      EOF
+      time_partitioning = {
+        type                     = "DAY",
+        field                    = "update_date",
+        require_partition_filter = true,
+        expiration_ms            = null,
+      },
+      range_partitioning = null,
+      expiration_time    = null,
+      clustering         = ["update_id", "file_name", "log_date", "log_epoch"],
+      labels             = {}
+    },
+    {
       table_id = "telegram_msg_log_update",
       schema   = <<EOF
       [
