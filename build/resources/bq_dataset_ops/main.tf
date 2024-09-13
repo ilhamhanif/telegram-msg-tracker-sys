@@ -13,7 +13,6 @@ locals {
         { "name": "file", "type": "JSON", "mode": "NULLABLE" },
         { "name": "file_name", "type": "STRING", "mode": "NULLABLE" },
         { "name": "file_path", "type": "STRING", "mode": "NULLABLE" },
-        { "name": "file_path_rel", "type": "STRING", "mode": "NULLABLE" },
         { "name": "log_date", "type": "DATE", "mode": "NULLABLE" },
         { "name": "log_datetime", "type": "DATETIME", "mode": "NULLABLE" },
         { "name": "log_epoch", "type": "INTEGER", "mode": "NULLABLE" }
