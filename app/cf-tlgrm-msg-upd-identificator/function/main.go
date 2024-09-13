@@ -10,6 +10,7 @@ import (
 
 const PROJECT_ID = "protean-quanta-434205-p5"
 const PUBSUB_TOPIC_SEND_MESSAGE = "tlgrm_act_send_message"
+const PUBSUB_TOPIC_FILE_DOWNLOADER = "tlgrm_utils_file_downloader"
 const BQ_DATASET_NAME = "ops"
 const BQ_TABLE_NAME = "telegram_msg_log_identification"
 

@@ -65,20 +65,38 @@ func (r *IdentificationResult) isBotCommand() error {
 
 }
 
-func (r *IdentificationResult) isText() error {
+func (r *IdentificationResult) isPhoto() error {
 
 	/*
-		A method to handle Text.
+		A method to handle Photo.
 	*/
+
+	var botFileDownloadParams BotFileDownloadParams
+
+	if r.Result.Type == "PHOTO" {
+		botFileDownloadParams.UpdateID = r.UpdateID
+		botFileDownloadParams.UpdateEpoch = r.UpdateEpoch
+		botFileDownloadParams.UpdateDate = r.UpdateDate
+		botFileDownloadParams.UpdateDatetime = r.UpdateDatetime
+		for _, v := range r.Result.Photo {
+			botFileDownloadParams.Files = append(botFileDownloadParams.Files, map[string]string{
+				"file_id":        v.FileID,
+				"file_unique_id": v.FileUniqueID,
+			})
+		}
+	}
+	if err := botFileDownloadParams.sendMessage(); err != nil {
+		return fmt.Errorf("isPhoto: Error sending to PubSub: %w", err)
+	}
 
 	return nil
 
 }
 
-func (r *IdentificationResult) isPhoto() error {
+func (r *IdentificationResult) isText() error {
 
 	/*
-		A method to handle Photo.
+		A method to handle Text.
 	*/
 
 	return nil
