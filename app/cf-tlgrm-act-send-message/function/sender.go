@@ -51,7 +51,7 @@ func (m *PubsubData) sendMessage(v *ApiResult) error {
 		return fmt.Errorf("sendMessage: Failed to read API body response: %w", err)
 	}
 	if err := json.Unmarshal(body, &v.Message); err != nil {
-		return fmt.Errorf("sendMessage: Failed to store API result: %w", err)
+		return fmt.Errorf("sendMessage: Failed to store API response: %w", err)
 	}
 	v.StatusCode = resp.StatusCode
 

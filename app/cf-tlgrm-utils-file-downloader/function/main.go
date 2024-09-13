@@ -42,7 +42,7 @@ func TelegramUtilsFileDownloader(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Download object to GCS
+	// Download object from Telegram Server to GCS.
 	if err := pubsubData.downloadFile(); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

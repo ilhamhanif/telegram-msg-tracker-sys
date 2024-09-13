@@ -31,21 +31,21 @@ func (pd *PubsubData) downloadFile() error {
 		A method to download a File.
 	*/
 
-	// Initialize currDir and targetDir
+	// Initialize a `currDir` and `targetDir`
 	currDir, err := os.Getwd()
 	if err != nil {
-		return fmt.Errorf("downloadFile: Failed to get current workdir: %w", err)
+		return fmt.Errorf("downloadFile: Failed to get current workdir location: %w", err)
 	}
-
 	targetDir := filepath.Join(currDir, "target")
 	if _, err = os.Stat(targetDir); os.IsNotExist(err) {
 		err = os.Mkdir(targetDir, 0777)
 		if err != nil {
-			return fmt.Errorf("downloadFile: Failed to create target directory: %w", err)
+			return fmt.Errorf("downloadFile: Failed to create a target directory: %w", err)
 		}
 	}
 	defer os.RemoveAll(targetDir)
 
+	// Iterate over `Files` given.
 	for _, v := range pd.Files {
 
 		var apiResult ApiResult
@@ -53,30 +53,32 @@ func (pd *PubsubData) downloadFile() error {
 
 		// Sent the data to Telegram API endpoint
 		// using HTTP GET.
+		// https://core.telegram.org/bots/api#file
 		gf_resp, gf_err := http.Get(URL_GET_FILE + "?file_id=" + v["file_id"])
 		if gf_err != nil {
-			return fmt.Errorf("downloadFile: Failed to send message through GET_FILE URL: %w", gf_err)
+			return fmt.Errorf("downloadFile: Failed to call GET_FILE URL: %w", gf_err)
 		}
 		defer gf_resp.Body.Close()
 
-		// Store the response status code and message
+		// Store the response status code and message.
 		body, err := io.ReadAll(gf_resp.Body)
 		if err != nil {
 			return fmt.Errorf("downloadFile: Failed to read API body response: %w", err)
 		}
 		if err := json.Unmarshal(body, &apiResult); err != nil {
-			return fmt.Errorf("sendMessage: Failed to store API result: %w", err)
+			return fmt.Errorf("sendMessage: Failed to store API response: %w", err)
 		}
 
 		// Download file from Telegram
 		// using HTTP GET.
+		// https://core.telegram.org/bots/api#getfile
 		dl_resp, dl_err := http.Get(URL_DOWNLOAD_FILE + "/" + apiResult.Result.FilePath)
 		if dl_err != nil {
-			return fmt.Errorf("downloadFile: Failed to send message through DOWNLOAD_FILE URL: %w", err)
+			return fmt.Errorf("downloadFile: Failed to call DOWNLOAD_FILE URL: %w", err)
 		}
 		defer dl_resp.Body.Close()
 
-		// Save file in designated path.
+		// Save the downloaded file in `targetDir`.
 		fileName := apiResult.Result.FileID + "_" + apiResult.Result.FileUniqueID + "_" + strings.Replace(apiResult.Result.FilePath, "/", "", -1)
 		filePath := filepath.Join(targetDir, fileName)
 		filePathRel, _ := filepath.Rel(targetDir, filePath)
@@ -90,7 +92,7 @@ func (pd *PubsubData) downloadFile() error {
 			return fmt.Errorf("downloadFile: Failed to copy downloaded file into target directory: %w", err)
 		}
 
-		// Upload file to GCS
+		// Upload downloaded file to GCS.
 		downloadedFile.FileUpdateID = pd.UpdateID
 		downloadedFile.FileUpdateDate = pd.UpdateDate
 		downloadedFile.FileName = fileName
@@ -100,7 +102,8 @@ func (pd *PubsubData) downloadFile() error {
 			return fmt.Errorf("downloadFile: Failed to upload file to GCS: %w", err)
 		}
 
-		// Insert log to Google BigQuery.
+		// Insert download and upload activitylog
+		// to Google BigQuery.
 		var bqRows = BqRow{
 			PubsubData:     *pd,
 			DownloadedFile: downloadedFile,
@@ -109,7 +112,7 @@ func (pd *PubsubData) downloadFile() error {
 			return fmt.Errorf("downloadFile: Failed to save log to BigQuery: %w", err)
 		}
 
-		// Remove file after successfully upload to GCS
+		// Remove downloaded file after successfully upload to GCS.
 		if err = os.Remove(filePath); err != nil {
 			return fmt.Errorf("downloadedFile: Failed to remove downloaded file: %w", err)
 		}
