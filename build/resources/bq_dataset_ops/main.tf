@@ -78,7 +78,7 @@ locals {
   ]
 }
 
-# BigQuery
+# BigQuery - Dataset Ops
 module "bigquery" {
   source  = "terraform-google-modules/bigquery/google"
   version = "~> 8.1"
