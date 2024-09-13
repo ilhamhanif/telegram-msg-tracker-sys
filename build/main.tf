@@ -64,8 +64,11 @@ module "cf_ps_dead_letter_logger" {
 
 ## Cloud Function2 - Utils - File Downloader
 module "cf_tlgrm_utils_file_downloader" {
-  source     = "./resources/cf_tlgrm_utils_file_downloader"
-  depends_on = [null_resource.pre_resources_build_complete]
+  source = "./resources/cf_tlgrm_utils_file_downloader"
+  depends_on = [
+    null_resource.pre_resources_build_complete,
+    module.cf_ps_dead_letter_logger
+  ]
 
   project_id     = var.project_id
   project_number = data.google_project.gcp_project_var.number
@@ -74,8 +77,11 @@ module "cf_tlgrm_utils_file_downloader" {
 
 ## Cloud Function2 - Telegram Message Forwarder
 module "cf_tlgrm_msg_upd_forwarder" {
-  source     = "./resources/cf_tlgrm_msg_upd_forwarder"
-  depends_on = [null_resource.pre_resources_build_complete]
+  source = "./resources/cf_tlgrm_msg_upd_forwarder"
+  depends_on = [
+    null_resource.pre_resources_build_complete,
+    module.cf_ps_dead_letter_logger
+  ]
 
   project_id     = var.project_id
   project_number = data.google_project.gcp_project_var.number
@@ -84,8 +90,11 @@ module "cf_tlgrm_msg_upd_forwarder" {
 
 ## Cloud Function2 - Telegram Message Identificator
 module "cf_tlgrm_msg_upd_identificator" {
-  source     = "./resources/cf_tlgrm_msg_upd_identificator"
-  depends_on = [null_resource.pre_resources_build_complete]
+  source = "./resources/cf_tlgrm_msg_upd_identificator"
+  depends_on = [
+    null_resource.pre_resources_build_complete,
+    module.cf_ps_dead_letter_logger
+  ]
 
   project_id     = var.project_id
   project_number = data.google_project.gcp_project_var.number
@@ -94,8 +103,11 @@ module "cf_tlgrm_msg_upd_identificator" {
 
 ## Cloud Function2 - Telegram Message Logger
 module "cf_tlgrm_msg_upd_logger" {
-  source     = "./resources/cf_tlgrm_msg_upd_logger"
-  depends_on = [null_resource.pre_resources_build_complete]
+  source = "./resources/cf_tlgrm_msg_upd_logger"
+  depends_on = [
+    null_resource.pre_resources_build_complete,
+    module.cf_ps_dead_letter_logger
+  ]
 
   project_id     = var.project_id
   project_number = data.google_project.gcp_project_var.number
@@ -104,8 +116,11 @@ module "cf_tlgrm_msg_upd_logger" {
 
 ## Cloud Function2 - Telegram Action - Send Message
 module "cf_tlgrm_act_send_message" {
-  source     = "./resources/cf_tlgrm_act_send_message"
-  depends_on = [null_resource.pre_resources_build_complete]
+  source = "./resources/cf_tlgrm_act_send_message"
+  depends_on = [
+    null_resource.pre_resources_build_complete,
+    module.cf_ps_dead_letter_logger
+  ]
 
   project_id     = var.project_id
   project_number = data.google_project.gcp_project_var.number
