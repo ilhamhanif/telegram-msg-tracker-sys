@@ -34,7 +34,6 @@ func (r *BqRow) Save() (map[string]bigquery.Value, string, error) {
 	fileStr := string(file)
 	fileName := r.DownloadedFile.FileName
 	filePath := r.DownloadedFile.FilePath
-	filePathRel := r.DownloadedFile.FilePathRel
 
 	return map[string]bigquery.Value{
 		"update_id":       updateID,
@@ -44,7 +43,6 @@ func (r *BqRow) Save() (map[string]bigquery.Value, string, error) {
 		"file":            fileStr,
 		"file_name":       fileName,
 		"file_path":       filePath,
-		"file_path_rel":   filePathRel,
 		"log_date":        logDate,
 		"log_datetime":    logDatetime,
 		"log_epoch":       logEpoch,
