@@ -3,6 +3,39 @@ locals {
   bq_dataset_id   = local.bq_dataset_name
   bq_tables = [
     {
+      table_id = "pubsub_log_dead_letter",
+      schema   = <<EOF
+      [
+        { "name": "delivery_attempt", "type": "STRING", "mode": "NULLABLE" },
+        { "name": "subscription_nm", "type": "STRING", "mode": "NULLABLE" },
+        { "name": "subscription_project_id", "type": "STRING", "mode": "NULLABLE" },
+        { "name": "publish_datetime", "type": "DATETIME", "mode": "NULLABLE" },
+        { "name": "publish_date", "type": "DATE", "mode": "NULLABLE" },
+        { "name": "publish_epoch", "type": "INTEGER", "mode": "NULLABLE" },
+        { "name": "message_id", "type": "STRING", "mode": "NULLABLE" },
+        { "name": "message_data", "type": "STRING", "mode": "NULLABLE" },
+        { "name": "message_data_decoded", "type": "JSON", "mode": "NULLABLE" },
+        { "name": "dead_letter_datetime", "type": "DATETIME", "mode": "NULLABLE" },
+        { "name": "dead_letter_date", "type": "DATE", "mode": "NULLABLE" },
+        { "name": "dead_letter_epoch", "type": "INTEGER", "mode": "NULLABLE" },
+        { "name": "is_recycled", "type": "BOOL", "mode": "NULLABLE" },
+        { "name": "log_datetime", "type": "DATETIME", "mode": "NULLABLE" },
+        { "name": "log_date", "type": "DATE", "mode": "NULLABLE" },
+        { "name": "log_epoch", "type": "INTEGER", "mode": "NULLABLE" }
+      ]
+      EOF
+      time_partitioning = {
+        type                     = "DAY",
+        field                    = "dead_letter_date",
+        require_partition_filter = true,
+        expiration_ms            = null,
+      },
+      range_partitioning = null,
+      expiration_time    = null,
+      clustering         = ["log_date", "publish_date", "subscription_nm", "message_id"],
+      labels             = {}
+    },
+    {
       table_id = "telegram_utils_log_file_downloader",
       schema   = <<EOF
       [

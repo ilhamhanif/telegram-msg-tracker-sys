@@ -1,15 +1,17 @@
 # Setup local variables
 locals {
-  sa_default_compute_engine           = "${var.project_number}-compute@developer.gserviceaccount.com"
-  pubsub_topic_name                   = "tlgrm_act_send_message"
-  pubsub_subscriber_name              = local.pubsub_topic_name
-  pubsub_subscriber_ack_deadline      = 60
-  pubsub_subscriber_expiration_policy = ""
-  cf_name                             = "cf-tlgrm-act-send-message"
-  cf_entrypoint                       = "TelegramSendMessage"
-  cf_runtime                          = "go122"
-  cf_service_account_id               = local.cf_name
-  cf_service_account_name             = "Service Account dedicated for Cloud Function2: ${local.cf_name}"
+  sa_default_compute_engine               = "${var.project_number}-compute@developer.gserviceaccount.com"
+  pubsub_topic_name                       = "tlgrm_act_send_message"
+  pubsub_subscriber_name                  = local.pubsub_topic_name
+  pubsub_subscriber_ack_deadline          = 60
+  pubsub_subscriber_expiration_policy     = ""
+  pubsub_subscriber_dead_letter_topic     = "projects/${var.project_id}/topics/pubsub_log_dead_letter"
+  pubsub_subscriber_max_delivery_attempts = 5
+  cf_name                                 = "cf-tlgrm-act-send-message"
+  cf_entrypoint                           = "TelegramSendMessage"
+  cf_runtime                              = "go122"
+  cf_service_account_id                   = local.cf_name
+  cf_service_account_name                 = "Service Account dedicated for Cloud Function2: ${local.cf_name}"
   cf_service_account_roles = [
     "roles/bigquery.dataEditor"
   ]
@@ -46,6 +48,8 @@ module "pubsub" {
       push_endpoint              = module.cloud_functions2.function_uri
       oidc_service_account_email = local.sa_default_compute_engine
       expiration_policy          = local.pubsub_subscriber_expiration_policy
+      dead_letter_topic          = local.pubsub_subscriber_dead_letter_topic
+      max_delivery_attempts      = local.pubsub_subscriber_max_delivery_attempts
     }
   ]
 }

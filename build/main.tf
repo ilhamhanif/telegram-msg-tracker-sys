@@ -52,6 +52,16 @@ resource "null_resource" "pre_resources_build_complete" {
 }
 
 # Resources Stack
+## Cloud Function2 - Dead Letter Logger
+module "cf_ps_dead_letter_logger" {
+  source     = "./resources/cf_ps_dead_letter_logger"
+  depends_on = [null_resource.pre_resources_build_complete]
+
+  project_id     = var.project_id
+  project_number = data.google_project.gcp_project_var.number
+  region         = var.region
+}
+
 ## Cloud Function2 - Utils - File Downloader
 module "cf_tlgrm_utils_file_downloader" {
   source     = "./resources/cf_tlgrm_utils_file_downloader"
