@@ -5,18 +5,7 @@ terraform {
   }
 }
 
-# Setup .locals
-locals {
-  api_services = [
-    "compute.googleapis.com",
-    "cloudbuild.googleapis.com",
-    "run.googleapis.com",
-    "cloudfunctions.googleapis.com",
-    "bigquery.googleapis.com"
-  ]
-}
-
-# Setup Project Wide Configuration
+# Google Cloud Project - Config Variable
 provider "google" {
   project = var.project_id
   region  = var.region
@@ -24,83 +13,89 @@ provider "google" {
 
 data "google_project" "gcp_project_var" {}
 
-# Resources
-# API Services
-resource "google_project_service" "gcp_api_services" {
-  count              = length(local.api_services)
-  project            = var.project_id
-  service            = local.api_services[count.index]
-  disable_on_destroy = false
+# Pre-Resources
+## Google Cloud Project - API
+module "gcp_api" {
+  source = "./resources/gcp_api"
+
+  project_id     = var.project_id
+  project_number = data.google_project.gcp_project_var.number
+  region         = var.region
 }
 
-# Google Cloud Storage - Store All Cloud Function2 ZIP files
-resource "google_storage_bucket" "bucket_cf_zip_source_code" {
-  name     = "${var.project_id}-gcf-zip-source"
-  location = var.region
+## BigQuery - Dataset OPS
+module "bq_dataset_ops" {
+  source     = "./resources/bq_dataset_ops"
+  depends_on = [module.gcp_api]
 
-  lifecycle_rule {
-    condition {
-      age = "1"
-    }
-    action {
-      type = "Delete"
-    }
-  }
+  project_id     = var.project_id
+  project_number = data.google_project.gcp_project_var.number
+  region         = var.region
 }
 
-# Wait for All API 
-# and Initialization successfully enabled
-resource "null_resource" "resource_api_activation_complete" {
+## Google Cloud Storage - Buckets
+module "gcp_gcs_bucket" {
+  source     = "./resources/gcp_gcs_bucket"
+  depends_on = [module.gcp_api]
+
+  project_id     = var.project_id
+  project_number = data.google_project.gcp_project_var.number
+  region         = var.region
+}
+
+## Wait for Pre-Resources to finish
+resource "null_resource" "pre_resources_build_complete" {
   depends_on = [
-    google_project_service.gcp_api_services,
-    google_storage_bucket.bucket_cf_zip_source_code
+    module.bq_dataset_ops,
+    module.gcp_gcs_bucket
   ]
 }
 
-# BigQuery - Dataset OPS
-module "bq_dataset_ops" {
-  source     = "./resources/bq_dataset_ops"
-  depends_on = [null_resource.resource_api_activation_complete]
+# Resources Stack
+## Cloud Function2 - Utils - File Downloader
+module "cf_tlgrm_utils_file_downloader" {
+  source     = "./resources/cf_tlgrm_utils_file_downloader"
+  depends_on = [null_resource.pre_resources_build_complete]
 
   project_id     = var.project_id
   project_number = data.google_project.gcp_project_var.number
   region         = var.region
 }
 
-# Cloud Function2 - Telegram Message Forwarder
+## Cloud Function2 - Telegram Message Forwarder
 module "cf_tlgrm_msg_upd_forwarder" {
   source     = "./resources/cf_tlgrm_msg_upd_forwarder"
-  depends_on = [null_resource.resource_api_activation_complete]
+  depends_on = [null_resource.pre_resources_build_complete]
 
   project_id     = var.project_id
   project_number = data.google_project.gcp_project_var.number
   region         = var.region
 }
 
-# Cloud Function2 - Telegram Message Identificator
+## Cloud Function2 - Telegram Message Identificator
 module "cf_tlgrm_msg_upd_identificator" {
   source     = "./resources/cf_tlgrm_msg_upd_identificator"
-  depends_on = [null_resource.resource_api_activation_complete]
+  depends_on = [null_resource.pre_resources_build_complete]
 
   project_id     = var.project_id
   project_number = data.google_project.gcp_project_var.number
   region         = var.region
 }
 
-# Cloud Function2 - Telegram Message Logger
+## Cloud Function2 - Telegram Message Logger
 module "cf_tlgrm_msg_upd_logger" {
   source     = "./resources/cf_tlgrm_msg_upd_logger"
-  depends_on = [null_resource.resource_api_activation_complete]
+  depends_on = [null_resource.pre_resources_build_complete]
 
   project_id     = var.project_id
   project_number = data.google_project.gcp_project_var.number
   region         = var.region
 }
 
-# Cloud Function2 - Telegram Action - Send Message
+## Cloud Function2 - Telegram Action - Send Message
 module "cf_tlgrm_act_send_message" {
   source     = "./resources/cf_tlgrm_act_send_message"
-  depends_on = [null_resource.resource_api_activation_complete]
+  depends_on = [null_resource.pre_resources_build_complete]
 
   project_id     = var.project_id
   project_number = data.google_project.gcp_project_var.number
