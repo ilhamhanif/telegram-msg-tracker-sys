@@ -66,7 +66,6 @@ locals {
       table_id = "telegram_msg_log_update",
       schema   = <<EOF
       [
-        { "name": "update_id", "type": "INTEGER", "mode": "NULLABLE" },
         { "name": "update", "type": "JSON", "mode": "NULLABLE" },
         { "name": "log_date", "type": "DATE", "mode": "NULLABLE" },
         { "name": "log_datetime", "type": "DATETIME", "mode": "NULLABLE" },
@@ -81,7 +80,7 @@ locals {
       },
       range_partitioning = null,
       expiration_time    = null,
-      clustering         = ["update_id", "log_epoch"],
+      clustering         = ["log_epoch"],
       labels             = {}
     },
     {
