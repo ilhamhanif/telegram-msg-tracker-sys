@@ -2,7 +2,7 @@ package function
 
 import (
 	"context"
-	"encoding/json"
+	"encoding/base64"
 	"fmt"
 	"time"
 
@@ -10,7 +10,7 @@ import (
 )
 
 type BqRow struct {
-	UpdateMessage PubsubData
+	UpdateMessage PubsubSubscription
 }
 
 func (r *BqRow) Save() (map[string]bigquery.Value, string, error) {
@@ -25,13 +25,12 @@ func (r *BqRow) Save() (map[string]bigquery.Value, string, error) {
 	logEpoch := currDatetime.Format("20060102150405")
 	logDate := currDatetime.Format("2006-01-02")
 
-	updateID := r.UpdateMessage.ID
-	update, _ := json.Marshal(r.UpdateMessage)
-	updateStr := string(update)
+	messageData := r.UpdateMessage.Message.Data
+	messageDataDecoded, _ := base64.StdEncoding.DecodeString(messageData)
+	messageDataDecodedStr := string(messageDataDecoded)
 
 	return map[string]bigquery.Value{
-		"update_id":    updateID,
-		"update":       updateStr,
+		"update":       messageDataDecodedStr,
 		"log_date":     logDate,
 		"log_datetime": logDatetime,
 		"log_epoch":    logEpoch,

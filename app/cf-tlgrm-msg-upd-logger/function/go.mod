@@ -5,7 +5,6 @@ go 1.22.5
 require (
 	cloud.google.com/go/bigquery v1.62.0
 	github.com/GoogleCloudPlatform/functions-framework-go v1.9.0
-	github.com/go-telegram/bot v1.7.2
 )
 
 require (

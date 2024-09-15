@@ -6,10 +6,23 @@ import (
 	"net/http"
 
 	"github.com/GoogleCloudPlatform/functions-framework-go/functions"
-	"github.com/go-telegram/bot/models"
 )
 
-type PubsubData models.Update
+// https://cloud.google.com/pubsub/docs/push#properties_of_a_push_subscription
+type PubsubMessage struct {
+	Attributes        map[string]string `json:"attributes"`
+	Data              string            `json:"data"`
+	MessageIDPascal   string            `json:"messageID"`
+	MessageID         string            `json:"message_id"`
+	PublishTimePascal string            `json:"publishTime"`
+	PublishTime       string            `json:"publish_time"`
+}
+
+type PubsubSubscription struct {
+	Message         *PubsubMessage `json:"message"`
+	Subscription    string         `json:"subscription"`
+	DeliveryAttempt int8           `json:"deliveryAttempt"`
+}
 
 const PROJECT_ID = "protean-quanta-434205-p5"
 const BQ_DATASET_NAME = "ops"
@@ -25,24 +38,17 @@ func TelegramMsgUpdateLogger(w http.ResponseWriter, r *http.Request) {
 		Main Function.
 	*/
 
-	var pubsubSubscription PubsubSubscription
-	var pubsubData PubsubData
+	var PubsubSubscription PubsubSubscription
 
 	// Receive and parse GCP Pub/Sub HTTP push data message.
-	if err := json.NewDecoder(r.Body).Decode(&pubsubSubscription); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	// Decode PubSub Message.
-	if err := pubsubSubscription.decodePubSubData(&pubsubData); err != nil {
+	if err := json.NewDecoder(r.Body).Decode(&PubsubSubscription); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	// Insert data to Google BigQuery.
 	var bqRows = BqRow{
-		UpdateMessage: pubsubData,
+		UpdateMessage: PubsubSubscription,
 	}
 	if err := bqRows.insertBqRows(); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
