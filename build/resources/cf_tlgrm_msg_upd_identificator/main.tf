@@ -6,7 +6,7 @@ locals {
   pubsub_subscriber_ack_deadline          = 60
   pubsub_subscriber_expiration_policy     = ""
   pubsub_subscriber_dead_letter_topic     = "projects/${var.project_id}/topics/pubsub_log_dead_letter"
-  pubsub_subscriber_max_delivery_attempts = 1
+  pubsub_subscriber_max_delivery_attempts = 5
   cf_name                                 = "cf-tlgrm-msg-upd-identificator"
   cf_entrypoint                           = "TelegramMsgUpdIdentificator"
   cf_runtime                              = "go122"
