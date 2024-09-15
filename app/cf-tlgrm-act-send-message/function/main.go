@@ -29,18 +29,18 @@ func TelegramSendMessage(w http.ResponseWriter, r *http.Request) {
 		Main Function.
 	*/
 
-	var pubsubMessage PubsubSubscription
+	var pubsubSubscription PubsubSubscription
 	var pubsubData PubsubData
 	var apiResult ApiResult
 
 	// Receive and parse GCP Pub/Sub HTTP push data message.
-	if err := json.NewDecoder(r.Body).Decode(&pubsubMessage); err != nil {
+	if err := json.NewDecoder(r.Body).Decode(&pubsubSubscription); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	// Decode PubSub data to get the `raw` data.
-	if err := pubsubMessage.decodePubSubData(&pubsubData); err != nil {
+	if err := pubsubSubscription.decodePubSubData(&pubsubData); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

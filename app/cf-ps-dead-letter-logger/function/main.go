@@ -43,17 +43,17 @@ func PubSubDeadLetterLogger(w http.ResponseWriter, r *http.Request) {
 		Main Function.
 	*/
 
-	var pubsubMessage PubsubSubscription
+	var pubsubSubscription PubsubSubscription
 
 	// Receive and parse GCP Pub/Sub HTTP push data message.
-	if err := json.NewDecoder(r.Body).Decode(&pubsubMessage); err != nil {
+	if err := json.NewDecoder(r.Body).Decode(&pubsubSubscription); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	// Insert data to Google BigQuery.
 	var bqRows = BqRow{
-		PubsubSubscription: pubsubMessage,
+		PubsubSubscription: pubsubSubscription,
 	}
 	if err := bqRows.insertBqRows(); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

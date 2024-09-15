@@ -27,17 +27,17 @@ func TelegramUtilsFileDownloader(w http.ResponseWriter, r *http.Request) {
 		Main Function.
 	*/
 
-	var pubsubMessage PubsubSubscription
+	var pubsubSubscription PubsubSubscription
 	var pubsubData PubsubData
 
 	// Receive and parse GCP Pub/Sub HTTP push data message.
-	if err := json.NewDecoder(r.Body).Decode(&pubsubMessage); err != nil {
+	if err := json.NewDecoder(r.Body).Decode(&pubsubSubscription); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	// Decode PubSub Message.
-	if err := pubsubMessage.decodePubSubData(&pubsubData); err != nil {
+	if err := pubsubSubscription.decodePubSubData(&pubsubData); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
