@@ -3,6 +3,54 @@ locals {
   bq_dataset_id   = local.bq_dataset_name
   bq_tables = [
     {
+      table_id = "gcs_bucket_notif_log",
+      schema   = <<EOF
+      [
+        { "name": "bucket_id", "type": "STRING", "mode": "NULLABLE" },
+        { "name": "event_datetime", "type": "DATETIME", "mode": "NULLABLE" },
+        { "name": "event_date", "type": "DATE", "mode": "NULLABLE" },
+        { "name": "event_epoch", "type": "INTEGER", "mode": "NULLABLE" },
+        { "name": "event_type", "type": "STRING", "mode": "NULLABLE" },
+        { "name": "notification_config", "type": "STRING", "mode": "NULLABLE" },
+        { "name": "object_generation", "type": "STRING", "mode": "NULLABLE" },
+        { "name": "payload_format", "type": "STRING", "mode": "NULLABLE" },
+        { "name": "object_id", "type": "STRING", "mode": "NULLABLE" },
+        { "name": "kind", "type": "STRING", "mode": "NULLABLE" },
+        { "name": "id", "type": "STRING", "mode": "NULLABLE" },
+        { "name": "self_link", "type": "STRING", "mode": "NULLABLE" },
+        { "name": "name", "type": "STRING", "mode": "NULLABLE" },
+        { "name": "metageneration", "type": "STRING", "mode": "NULLABLE" },
+        { "name": "content_type", "type": "STRING", "mode": "NULLABLE" },
+        { "name": "created_datetime", "type": "DATETIME", "mode": "NULLABLE" },
+        { "name": "created_date", "type": "DATE", "mode": "NULLABLE" },
+        { "name": "created_epoch", "type": "INTEGER", "mode": "NULLABLE" },
+        { "name": "updated_datetime", "type": "DATETIME", "mode": "NULLABLE" },
+        { "name": "updated_date", "type": "DATE", "mode": "NULLABLE" },
+        { "name": "updated_epoch", "type": "INTEGER", "mode": "NULLABLE" },
+        { "name": "storage_class", "type": "STRING", "mode": "NULLABLE" },
+        { "name": "storage_class_updated_datetime", "type": "DATETIME", "mode": "NULLABLE" },
+        { "name": "storage_class_updated_date", "type": "DATE", "mode": "NULLABLE" },
+        { "name": "storage_class_updated_epoch", "type": "INTEGER", "mode": "NULLABLE" },
+        { "name": "size", "type": "STRING", "mode": "NULLABLE" },
+        { "name": "media_link", "type": "STRING", "mode": "NULLABLE" },
+        { "name": "log_datetime", "type": "DATETIME", "mode": "NULLABLE" },
+        { "name": "log_date", "type": "DATE", "mode": "NULLABLE" },
+        { "name": "log_epoch", "type": "INTEGER", "mode": "NULLABLE" },
+        { "name": "raw", "type": "JSON", "mode": "NULLABLE" }
+      ]
+      EOF
+      time_partitioning = {
+        type                     = "DAY",
+        field                    = "event_date",
+        require_partition_filter = true,
+        expiration_ms            = null,
+      },
+      range_partitioning = null,
+      expiration_time    = null,
+      clustering         = ["log_date", "bucket_id", "object_id", "event_type"],
+      labels             = {}
+    },
+    {
       table_id = "pubsub_log_dead_letter",
       schema   = <<EOF
       [
