@@ -10,8 +10,8 @@ import (
 )
 
 type BqRow struct {
-	PubsubData PubsubData
-	ApiResult  ApiResult
+	PubsubData PubsubData `json:"pubsub_data"`
+	ApiResult  ApiResult  `json:"api_result"`
 }
 
 func (r *BqRow) Save() (map[string]bigquery.Value, string, error) {

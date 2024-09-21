@@ -10,8 +10,8 @@ import (
 )
 
 type BqRow struct {
-	PubsubData     PubsubData
-	DownloadedFile DownloadedFile
+	PubsubData     PubsubData     `json:"pubsub_data"`
+	DownloadedFile DownloadedFile `json:"downloaded_file"`
 }
 
 func (r *BqRow) Save() (map[string]bigquery.Value, string, error) {

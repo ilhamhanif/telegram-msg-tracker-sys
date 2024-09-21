@@ -10,7 +10,7 @@ import (
 )
 
 type BqRow struct {
-	UpdateMessage PubsubSubscription
+	PubsubSubscription PubsubSubscription `json:"pubsub_subscription"`
 }
 
 func (r *BqRow) Save() (map[string]bigquery.Value, string, error) {
@@ -25,7 +25,7 @@ func (r *BqRow) Save() (map[string]bigquery.Value, string, error) {
 	logEpoch := currDatetime.Format("20060102150405")
 	logDate := currDatetime.Format("2006-01-02")
 
-	messageData := r.UpdateMessage.Message.Data
+	messageData := r.PubsubSubscription.Message.Data
 	messageDataDecoded, _ := base64.StdEncoding.DecodeString(messageData)
 	messageDataDecodedStr := string(messageDataDecoded)
 

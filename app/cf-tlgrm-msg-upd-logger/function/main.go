@@ -48,7 +48,7 @@ func TelegramMsgUpdateLogger(w http.ResponseWriter, r *http.Request) {
 
 	// Insert data to Google BigQuery.
 	var bqRows = BqRow{
-		UpdateMessage: PubsubSubscription,
+		PubsubSubscription: PubsubSubscription,
 	}
 	if err := bqRows.insertBqRows(); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

@@ -21,10 +21,10 @@ type Attributes struct {
 }
 
 type PubsubMessage struct {
-	Attributes  Attributes
-	Data        string `json:"data"`
-	MessageID   string `json:"message_id"`
-	PublishTime string `json:"publish_time"`
+	Attributes  Attributes `json:"attributes"`
+	Data        string     `json:"data"`
+	MessageID   string     `json:"message_id"`
+	PublishTime string     `json:"publish_time"`
 }
 
 type PubsubSubscription struct {

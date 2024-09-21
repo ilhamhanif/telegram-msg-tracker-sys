@@ -10,7 +10,7 @@ import (
 )
 
 type BqRow struct {
-	PubsubSubscription PubsubSubscription
+	PubsubSubscription PubsubSubscription `json:"pubsub_subscription"`
 }
 
 func (r *BqRow) Save() (map[string]bigquery.Value, string, error) {

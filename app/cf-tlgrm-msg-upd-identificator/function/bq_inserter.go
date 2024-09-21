@@ -10,7 +10,7 @@ import (
 )
 
 type BqRow struct {
-	IdentificationResult IdentificationResult
+	IdentificationResult IdentificationResult `json:"identification_result"`
 }
 
 func (r *BqRow) Save() (map[string]bigquery.Value, string, error) {
