@@ -11,8 +11,6 @@ import (
 	"github.com/go-telegram/bot"
 )
 
-const URL = "http://localhost:8080/TelegramSendMessage"
-
 // https://cloud.google.com/pubsub/docs/push#properties_of_a_push_subscription
 type PubsubMessage struct {
 	Data        string `json:"data"`
@@ -31,6 +29,8 @@ type BotSendMessageParams struct {
 	UpdateDatetime string                `json:"update_datetime"`
 	Params         bot.SendMessageParams `json:"params"`
 }
+
+const URL = "http://localhost:8080/TelegramSendMessage"
 
 var botSendMessageParams = BotSendMessageParams{
 	UpdateID:       53726587267,

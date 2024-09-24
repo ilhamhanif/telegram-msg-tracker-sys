@@ -2,16 +2,14 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	"cloud.google.com/go/pubsub"
 )
 
-type Attributes struct {
-	CloudPubSubDeadLetterSourceDeliveryCount       string
-	CloudPubSubDeadLetterSourceSubscription        string
-	CloudPubSubDeadLetterSourceSubscriptionProject string
-	CloudPubSubDeadLetterSourceTopicPublishTime    string
+type PubsubData struct {
+	Text string `json:"text"`
 }
 
 const PROJECT_ID = "protean-quanta-434205-p5"
@@ -24,7 +22,11 @@ var attributes = map[string]string{
 	"CloudPubSubDeadLetterSourceTopicPublishTime":    "2023-06-28T07:36:09.478+00:00",
 }
 
-func publishToPubSub() error {
+var pubsubData = PubsubData{
+	Text: "Test",
+}
+
+func (pd *PubsubData) publishToPubSub() error {
 
 	// Setup PubSub client.
 	ctx := context.Background()
@@ -36,8 +38,12 @@ func publishToPubSub() error {
 
 	// Publish message to PubSub
 	t := client.Topic(PUBSUB_TOPIC)
+	jsonData, err := json.Marshal(pd)
+	if err != nil {
+		return fmt.Errorf("publishToPubSub: Error encoding JSON: %w", err)
+	}
 	result := t.Publish(ctx, &pubsub.Message{
-		Data:       []byte("eyJ0ZXN0IjoidGVzdCJ9"),
+		Data:       jsonData,
 		Attributes: attributes,
 	})
 
@@ -56,7 +62,7 @@ func main() {
 	// Send 100 messages through Pub/Sub.
 	for i := 0; i <= 100; i++ {
 
-		if err := publishToPubSub(); err != nil {
+		if err := pubsubData.publishToPubSub(); err != nil {
 			fmt.Printf("Error: %s", err)
 		}
 		fmt.Printf("%d\n", i)

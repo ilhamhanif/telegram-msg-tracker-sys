@@ -9,8 +9,6 @@ import (
 	"net/http"
 )
 
-const URL = "http://localhost:8080/TelegramUtilsFileDownloader"
-
 // https://cloud.google.com/pubsub/docs/push#properties_of_a_push_subscription
 type PubsubMessage struct {
 	Data        string `json:"data"`
@@ -29,6 +27,8 @@ type BotFileDownloadParams struct {
 	UpdateDatetime string              `json:"update_datetime"`
 	Files          []map[string]string `json:"files"`
 }
+
+const URL = "http://localhost:8080/TelegramUtilsFileDownloader"
 
 var botFileDownloadParams = BotFileDownloadParams{
 	UpdateID:       53726587267,
