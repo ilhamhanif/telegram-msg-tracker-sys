@@ -1,29 +1,12 @@
 package main
 
 import (
-	"bytes"
-	"encoding/base64"
+	"context"
 	"encoding/json"
 	"fmt"
-	"io"
-	"net/http"
+
+	"cloud.google.com/go/pubsub"
 )
-
-// https://cloud.google.com/pubsub/docs/push#properties_of_a_push_subscription
-type PubsubMessage struct {
-	Attributes        map[string]string `json:"attributes"`
-	Data              string            `json:"data"`
-	MessageIDPascal   string            `json:"messageID"`
-	MessageID         string            `json:"message_id"`
-	PublishTimePascal string            `json:"publishTime"`
-	PublishTime       string            `json:"publish_time"`
-}
-
-type PubsubSubscription struct {
-	Message         *PubsubMessage `json:"message"`
-	Subscription    string         `json:"subscription"`
-	DeliveryAttempt int8           `json:"deliveryAttempt"`
-}
 
 // https://cloud.google.com/storage/docs/json_api/v1/objects#resource-representations
 type PubsubData struct {
@@ -92,7 +75,8 @@ type Acl struct {
 	} `json:"projectTeam"`
 }
 
-const URL = "http://localhost:8080/GCSBucketNotifLogger"
+const PROJECT_ID = "protean-quanta-434205-p5"
+const PUBSUB_TOPIC = "gcs_bucket_notif_log"
 
 var attributes = map[string]string{
 	"bucketId":           "test",
@@ -109,48 +93,46 @@ var pubsubData = PubsubData{
 	ID:   "Test",
 }
 
-var pubsubMessage = PubsubMessage{
-	Attributes:  attributes,
-	MessageID:   "5333919906745759",
-	PublishTime: "2022-08-12T23:22:36.971Z",
-}
+func (pd *PubsubData) publishToPubSub() error {
 
-var pubsubSubscription = PubsubSubscription{
-	Message: &pubsubMessage,
+	// Setup PubSub client.
+	ctx := context.Background()
+	client, err := pubsub.NewClient(ctx, PROJECT_ID)
+	if err != nil {
+		return fmt.Errorf("publishToPubSub: Error creating NewClient: %w", err)
+	}
+	defer client.Close()
+
+	// Publish message to PubSub
+	t := client.Topic(PUBSUB_TOPIC)
+	jsonData, err := json.Marshal(pd)
+	if err != nil {
+		return fmt.Errorf("publishToPubSub: Error encoding JSON: %w", err)
+	}
+	result := t.Publish(ctx, &pubsub.Message{
+		Data:       jsonData,
+		Attributes: attributes,
+	})
+
+	// Block until the result is returned
+	// and a server-generated ID is returned for the published message.
+	if _, err := result.Get(ctx); err != nil {
+		return fmt.Errorf("publishToPubSub: Error publishing to PubSub: %w", err)
+	}
+
+	return nil
+
 }
 
 func main() {
 
-	// Setup message in JSON
-	// mimic-ing real GCP Pub/Sub HTTP push message.
-	messageJson, err := json.Marshal(pubsubData)
-	if err != nil {
-		fmt.Printf("Error: %s", err)
-	}
-	pubsubSubscription.Message.Data = base64.StdEncoding.EncodeToString(messageJson)
-	payloadJson, err := json.Marshal(pubsubSubscription)
-	if err != nil {
-		fmt.Printf("Error: %s", err)
-	}
+	// Send 100 messages through Pub/Sub.
+	for i := 0; i <= 100; i++ {
 
-	// Sent the data to local endpoint
-	// using HTTP POST.
-	req, err := http.NewRequest("POST", URL, bytes.NewBuffer(payloadJson))
-	if err != nil {
-		fmt.Printf("Error: %s", err)
+		if err := pubsubData.publishToPubSub(); err != nil {
+			fmt.Printf("Error: %s", err)
+		}
+		fmt.Printf("%d\n", i)
 	}
-	req.Header.Set("Content-Type", "application/json")
-
-	client := http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		fmt.Printf("Error: %s", err)
-	}
-	defer resp.Body.Close()
-
-	// Print response and status code
-	// given from the API.
-	body, _ := io.ReadAll(resp.Body)
-	fmt.Println(resp.StatusCode, string(body))
 
 }
