@@ -55,10 +55,11 @@ func (r *IdentificationResult) isBotCommand() error {
 			botSendMessageParams.UpdateDatetime = r.UpdateDatetime
 			botSendMessageParams.Params.ChatID = r.Result.ChatID
 			botSendMessageParams.Params.Text = "Bot command have to be started with /."
+
+			if err := botSendMessageParams.sendMessage(); err != nil {
+				return fmt.Errorf("isBotCommand: Error sending to PubSub: %w", err)
+			}
 		}
-	}
-	if err := botSendMessageParams.sendMessage(); err != nil {
-		return fmt.Errorf("isBotCommand: Error sending to PubSub: %w", err)
 	}
 
 	return nil
