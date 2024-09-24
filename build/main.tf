@@ -33,9 +33,9 @@ module "bq_dataset_ops" {
   region         = var.region
 }
 
-# [2.4] Cloud Function2 - Bucket Notif Logger
-module "cf_gcs_bucket_notif_logger" {
-  source     = "./resources/cf_gcs_bucket_notif_logger"
+# [2.4] Cloud Function2 - Dead Letter Logger
+module "cf_ps_dead_letter_logger" {
+  source     = "./resources/cf_ps_dead_letter_logger"
   depends_on = [module.gcp_api]
 
   project_id     = var.project_id
@@ -43,7 +43,17 @@ module "cf_gcs_bucket_notif_logger" {
   region         = var.region
 }
 
-# [2.5] Google Cloud Storage - Buckets
+# [2.5] Cloud Function2 - Bucket Notif Logger
+module "cf_gcs_bucket_notif_logger" {
+  source     = "./resources/cf_gcs_bucket_notif_logger"
+  depends_on = [module.cf_ps_dead_letter_logger]
+
+  project_id     = var.project_id
+  project_number = data.google_project.gcp_project_var.number
+  region         = var.region
+}
+
+# [2.6] Google Cloud Storage - Buckets
 # All bucket has bucket notif configuration.
 module "gcp_gcs_bucket" {
   source = "./resources/gcp_gcs_bucket"
@@ -52,16 +62,6 @@ module "gcp_gcs_bucket" {
   project_number                 = data.google_project.gcp_project_var.number
   region                         = var.region
   pubsub_bucket_notif_topic_name = module.cf_gcs_bucket_notif_logger.pubsub_topic_name
-}
-
-# [2.6] Cloud Function2 - Dead Letter Logger
-module "cf_ps_dead_letter_logger" {
-  source     = "./resources/cf_ps_dead_letter_logger"
-  depends_on = [module.gcp_api]
-
-  project_id     = var.project_id
-  project_number = data.google_project.gcp_project_var.number
-  region         = var.region
 }
 
 # [2.7] Wait for Pre-Resources to finish
